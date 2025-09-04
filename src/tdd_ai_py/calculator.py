@@ -6,28 +6,21 @@ from typing import Union
 class Calculator:
     """A simple calculator class for basic arithmetic operations."""
 
-    def add(
-        self, a: Union[int, float], b: Union[int, float]
-    ) -> Union[int, float]:
-        """Add two numbers.
+    def add(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+        """Add two numbers together.
 
         Args:
-            a: The first number
-            b: The second number
+            a: First number
+            b: Second number
 
         Returns:
             The sum of a and b
-
-        Raises:
-            TypeError: If either of the inputs is not a number
         """
         if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
             raise TypeError("Both arguments must be numbers")
         return a + b
 
-    def subtract(
-        self, a: Union[int, float], b: Union[int, float]
-    ) -> Union[int, float]:
+    def subtract(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
         """Subtract two numbers.
 
         Args:
@@ -44,9 +37,7 @@ class Calculator:
             raise TypeError("Both arguments must be numbers")
         return a - b
 
-    def multiply(
-        self, a: Union[int, float], b: Union[int, float]
-    ) -> Union[int, float]:
+    def multiply(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
         """Multiply two numbers.
 
         Args:
@@ -63,9 +54,7 @@ class Calculator:
             raise TypeError("Both arguments must be numbers")
         return a * b
 
-    def divide(
-        self, a: Union[int, float], b: Union[int, float]
-    ) -> float:
+    def divide(self, a: Union[int, float], b: Union[int, float]) -> float:
         """Divide a by b.
 
         Args:
