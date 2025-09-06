@@ -14,3 +14,13 @@ class TestHuffmanEncoder:
         codes = generate_huffman_codes(root_node)
 
         assert codes == {"a": "0"}
+
+    def test_generates_codes_for_tree_with_two_leaf_nodes(self) -> None:
+        """Test that tree with two leaves generates '0' for left, '1' for right."""
+        left_node = HuffmanNode(weight=1, character="a")
+        right_node = HuffmanNode(weight=1, character="b")
+        root_node = HuffmanNode(weight=2, left=left_node, right=right_node)
+
+        codes = generate_huffman_codes(root_node)
+
+        assert codes == {"a": "0", "b": "1"}
