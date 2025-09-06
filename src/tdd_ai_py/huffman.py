@@ -8,13 +8,12 @@ from typing import Callable, Dict, List, Optional, Tuple, TypeVar
 T = TypeVar("T")
 
 
-@dataclass(frozen=True, order=True)
+@dataclass(frozen=True)
 class HuffmanNode:
     """A node in the Huffman binary tree.
 
     This immutable data class represents a node in the Huffman tree structure.
     Leaf nodes contain characters, while internal nodes combine frequencies.
-    The order=True parameter enables natural sorting by weight for heap operations.
     """
 
     weight: int
@@ -26,6 +25,21 @@ class HuffmanNode:
     def is_leaf(self) -> bool:
         """Check if this node is a leaf node."""
         return self.left is None and self.right is None
+
+    def __lt__(self, other: "HuffmanNode") -> bool:
+        """Enable comparison for heap operations based only on weight."""
+        return self.weight < other.weight
+
+    def __eq__(self, other: object) -> bool:
+        """Enable equality comparison."""
+        if not isinstance(other, HuffmanNode):
+            return False
+        return (
+            self.weight == other.weight
+            and self.character == other.character
+            and self.left == other.left
+            and self.right == other.right
+        )
 
 
 def create_leaf_node(character: str, weight: int) -> HuffmanNode:
@@ -185,3 +199,33 @@ class HuffmanCompressor:
         """
         left_node, right_node = find_two_lowest_nodes(nodes)
         return combine_nodes(left_node, right_node)
+
+    def build_huffman_tree(self, frequency_map: Dict[str, int]) -> HuffmanNode:
+        """Build a complete Huffman tree from a frequency map.
+
+        Uses a heap-based approach for efficient selection of lowest weight nodes.
+        Repeatedly selects the two nodes with lowest weights and joins them
+        until only one root node remains.
+
+        Args:
+            frequency_map: Dictionary mapping characters to their frequencies
+
+        Returns:
+            The root node of the complete Huffman tree
+        """
+        # Create initial leaf nodes and build a min-heap
+        heap = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
+        heapq.heapify(heap)
+
+        # Keep combining nodes until only one remains
+        while len(heap) > 1:
+            # Pop the two nodes with lowest weights (O(log n) each)
+            left_node = heapq.heappop(heap)
+            right_node = heapq.heappop(heap)
+
+            # Create new internal node and push it back (O(log n))
+            combined_node = combine_nodes(left_node, right_node)
+            heapq.heappush(heap, combined_node)
+
+        # Return the final root node
+        return heap[0]

@@ -99,3 +99,47 @@ class TestHuffmanCompressor:
         left_char = result.left.character
         right_char = result.right.character
         assert {left_char, right_char} == {"c", "d"}
+        assert result.left.weight == 1
+        assert result.right.weight == 1
+
+    def test_builds_complete_huffman_tree(self) -> None:
+        """Test that a complete Huffman tree is built from a frequency map."""
+        # ARRANGE
+        frequency_map = {"a": 5, "b": 2, "r": 2, "c": 1, "d": 1}
+        # Expected tree structure:
+        # Root(11)
+        # ├── a(5)
+        # └── Internal(6)
+        #     ├── Internal(4)
+        #     │   ├── b(2)
+        #     │   └── r(2)
+        #     └── Internal(2)
+        #         ├── c(1)
+        #         └── d(1)
+
+        # ACT
+        result = self.compressor.build_huffman_tree(frequency_map)
+
+        # ASSERT
+        assert isinstance(result, HuffmanNode)
+        assert result.weight == 11  # Sum of all frequencies
+        assert result.character is None  # Root is internal node
+
+        # Should have left and right children
+        assert result.left is not None
+        assert result.right is not None
+
+        # One child should be 'a' with weight 5, other should be internal with weight 6
+        weights = {result.left.weight, result.right.weight}
+        assert weights == {5, 6}
+
+        # Find the leaf node 'a' and internal node
+        if result.left.weight == 5:
+            a_node = result.left
+            internal_node = result.right
+        else:
+            a_node = result.right
+            internal_node = result.left
+
+        assert a_node.character == "a"
+        assert internal_node.character is None
