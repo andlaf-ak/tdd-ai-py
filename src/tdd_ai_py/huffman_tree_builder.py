@@ -53,32 +53,22 @@ def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
     )
 
 
-class HuffmanTreeBuilder:
+def build_huffman_tree(frequency_map: Dict[str, int]) -> HuffmanNode:
+    # Create initial leaf nodes and build a min-heap
+    heap = [
+        create_leaf_node(char, freq) for char, freq in frequency_map.items()
+    ]
+    heapq.heapify(heap)
 
-    def select_and_join_lowest_nodes(
-        self, nodes: List[HuffmanNode]
-    ) -> HuffmanNode:
-        left_node, right_node = find_two_lowest_items(
-            nodes, lambda node: node.weight
-        )
-        return create_internal_node(left_node, right_node)
+    # Keep combining nodes until only one remains
+    while len(heap) > 1:
+        # Pop the two nodes with lowest weights (O(log n) each)
+        left_node = heapq.heappop(heap)
+        right_node = heapq.heappop(heap)
 
-    def build_huffman_tree(self, frequency_map: Dict[str, int]) -> HuffmanNode:
-        # Create initial leaf nodes and build a min-heap
-        heap = [
-            create_leaf_node(char, freq) for char, freq in frequency_map.items()
-        ]
-        heapq.heapify(heap)
+        # Create new internal node and push it back (O(log n))
+        combined_node = create_internal_node(left_node, right_node)
+        heapq.heappush(heap, combined_node)
 
-        # Keep combining nodes until only one remains
-        while len(heap) > 1:
-            # Pop the two nodes with lowest weights (O(log n) each)
-            left_node = heapq.heappop(heap)
-            right_node = heapq.heappop(heap)
-
-            # Create new internal node and push it back (O(log n))
-            combined_node = create_internal_node(left_node, right_node)
-            heapq.heappush(heap, combined_node)
-
-        # Return the root node
-        return heap[0]
+    # Return the root node
+    return heap[0]

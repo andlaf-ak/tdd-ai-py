@@ -4,7 +4,7 @@ import pytest
 
 from tdd_ai_py.huffman_tree_builder import (
     HuffmanNode,
-    HuffmanTreeBuilder,
+    build_huffman_tree,
     create_internal_node,
     create_leaf_node,
     find_two_lowest_items,
@@ -71,41 +71,8 @@ class TestHuffmanNode:
         assert node1 != "not a node"
 
 
-class TestHuffmanTreeBuilder:
-    """Test cases for the HuffmanTreeBuilder class."""
-
-    def setup_method(self) -> None:
-        """Set up test fixtures before each test method."""
-        self.builder = HuffmanTreeBuilder()
-
-    def test_selects_and_joins_two_lowest_frequency_nodes(self) -> None:
-        """Test that two lowest frequency nodes are selected and joined."""
-        # ARRANGE
-        nodes = [
-            HuffmanNode(weight=5, character="a"),
-            HuffmanNode(weight=1, character="c"),
-            HuffmanNode(weight=2, character="b"),
-            HuffmanNode(weight=1, character="d"),
-        ]
-        expected_weight = 2  # 1 + 1
-
-        # ACT
-        result = self.builder.select_and_join_lowest_nodes(nodes)
-
-        # ASSERT
-        assert isinstance(result, HuffmanNode)
-        assert result.weight == expected_weight
-
-        # Should combine the two nodes with weight 1 each
-        assert result.left is not None
-        assert result.right is not None
-        assert result.left.weight == 1
-        assert result.right.weight == 1
-
-        # Should combine characters 'c' and 'd'
-        left_char = result.left.character
-        right_char = result.right.character
-        assert {left_char, right_char} == {"c", "d"}
+class TestBuildHuffmanTree:
+    """Test cases for the build_huffman_tree function."""
 
     def test_builds_complete_huffman_tree(self) -> None:
         """Test that a complete Huffman tree is built from a frequency map."""
@@ -113,7 +80,7 @@ class TestHuffmanTreeBuilder:
         frequency_map = {"a": 5, "b": 2, "r": 2, "c": 1, "d": 1}
 
         # ACT
-        result = self.builder.build_huffman_tree(frequency_map)
+        result = build_huffman_tree(frequency_map)
 
         # ASSERT
         assert isinstance(result, HuffmanNode)
@@ -130,7 +97,7 @@ class TestHuffmanTreeBuilder:
         frequency_map = {"a": 5}
 
         # ACT
-        result = self.builder.build_huffman_tree(frequency_map)
+        result = build_huffman_tree(frequency_map)
 
         # ASSERT
         assert isinstance(result, HuffmanNode)
