@@ -1,12 +1,13 @@
-# TDD AI Python Calculator
+# TDD AI Python
 
-A simple calculator implementation developed using Test-Driven Development (TDD) principles.
+A Python project demonstrating Test-Driven Development (TDD) principles with Huffman compression implementation.
 
 ## Features
 
-- Basic arithmetic operations: addition, subtraction, multiplication, division
-- Input validation and error handling
+- Huffman compression and decompression algorithm
+- Pure functional approach with immutable data structures
 - Comprehensive test coverage
+- Type annotations throughout
 
 ## Installation
 
@@ -33,14 +34,15 @@ poetry run pytest -v
 ## Usage
 
 ```python
-from tdd_ai_py.calculator import Calculator
+from tdd_ai_py.huffman import HuffmanCompressor
 
-calc = Calculator()
-result = calc.add(2, 3)  # Returns 5
+compressor = HuffmanCompressor()
+frequency_map = compressor.create_frequency_map("hello world")
+huffman_tree = compressor.build_huffman_tree(frequency_map)
 ```
 
 ## Project Structure
 
-- `src/tdd_ai_py/calculator.py` - Main calculator implementation
-- `tests/test_calculator.py` - Comprehensive test suite
+- `src/tdd_ai_py/huffman.py` - Huffman compression implementation
+- `tests/test_huffman.py` - Comprehensive test suite
 - `pyproject.toml` - Project configuration and dependencies
