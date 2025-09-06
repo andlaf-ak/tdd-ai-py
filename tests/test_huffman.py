@@ -30,7 +30,9 @@ class TestHuffmanCompressor:
         expected_weight = 2
 
         # ACT
-        result = self.compressor.create_node_from_values(char1, freq1, char2, freq2)
+        result = self.compressor.create_node_from_values(
+            char1, freq1, char2, freq2
+        )
 
         # ASSERT
         assert isinstance(result, HuffmanNode)
@@ -53,7 +55,9 @@ class TestHuffmanCompressor:
         expected_weight = 2
 
         # ACT
-        result = self.compressor.create_node_from_lowest_frequencies(frequency_map)
+        result = self.compressor.create_node_from_lowest_frequencies(
+            frequency_map
+        )
 
         # ASSERT
         assert isinstance(result, HuffmanNode)

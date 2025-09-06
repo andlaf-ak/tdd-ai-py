@@ -6,7 +6,9 @@ from typing import Union
 class Calculator:
     """A simple calculator class for basic arithmetic operations."""
 
-    def add(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+    def add(
+        self, a: Union[int, float], b: Union[int, float]
+    ) -> Union[int, float]:
         """Add two numbers together.
 
         Args:
@@ -20,7 +22,9 @@ class Calculator:
             raise TypeError("Both arguments must be numbers")
         return a + b
 
-    def subtract(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+    def subtract(
+        self, a: Union[int, float], b: Union[int, float]
+    ) -> Union[int, float]:
         """Subtract two numbers.
 
         Args:
@@ -37,7 +41,9 @@ class Calculator:
             raise TypeError("Both arguments must be numbers")
         return a - b
 
-    def multiply(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+    def multiply(
+        self, a: Union[int, float], b: Union[int, float]
+    ) -> Union[int, float]:
         """Multiply two numbers.
 
         Args:

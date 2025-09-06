@@ -65,11 +65,15 @@ def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
     Returns:
         A HuffmanNode with combined weight and the given children
     """
-    return HuffmanNode(weight=left.weight + right.weight, left=left, right=right)
+    return HuffmanNode(
+        weight=left.weight + right.weight, left=left, right=right
+    )
 
 
-def find_two_lowest_items(items: List[T], key_func: Callable[[T], int]) -> Tuple[T, T]:
-    """Generic function to find two items with lowest values based on a key function.
+def find_two_lowest_items(
+    items: List[T], key_func: Callable[[T], int]
+) -> Tuple[T, T]:
+    """Generic function to find two items with lowest values based on a key.
 
     Args:
         items: List of items to search
@@ -82,7 +86,9 @@ def find_two_lowest_items(items: List[T], key_func: Callable[[T], int]) -> Tuple
     return two_lowest[0], two_lowest[1]
 
 
-def find_two_lowest_nodes(nodes: List[HuffmanNode]) -> Tuple[HuffmanNode, HuffmanNode]:
+def find_two_lowest_nodes(
+    nodes: List[HuffmanNode],
+) -> Tuple[HuffmanNode, HuffmanNode]:
     """Find the two nodes with lowest frequencies from a list of nodes.
 
     Args:
@@ -95,7 +101,7 @@ def find_two_lowest_nodes(nodes: List[HuffmanNode]) -> Tuple[HuffmanNode, Huffma
 
 
 def find_two_lowest_frequencies(
-    frequency_map: Dict[str, int]
+    frequency_map: Dict[str, int],
 ) -> Tuple[Tuple[str, int], Tuple[str, int]]:
     """Find the two entries with lowest frequencies from a frequency map.
 
@@ -103,7 +109,8 @@ def find_two_lowest_frequencies(
         frequency_map: Dictionary mapping characters to their frequencies
 
     Returns:
-        Tuple containing the two (character, frequency) pairs with lowest frequencies
+        Tuple containing the two (character, frequency) pairs with lowest
+        frequencies
     """
     return find_two_lowest_items(list(frequency_map.items()), lambda x: x[1])
 
@@ -140,9 +147,9 @@ def combine_nodes(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
 class HuffmanCompressor:
     """A class for Huffman compression and decompression.
 
-    This class provides methods to build Huffman trees and compress/decompress text
-    using the Huffman coding algorithm. All methods delegate to pure functions
-    for better testability and composability.
+    This class provides methods to build Huffman trees and compress/decompress
+    text using the Huffman coding algorithm. All methods delegate to pure
+    functions for better testability and composability.
     """
 
     def create_frequency_map(self, text: str) -> Dict[str, int]:
@@ -177,7 +184,8 @@ class HuffmanCompressor:
     def create_node_from_lowest_frequencies(
         self, frequency_map: Dict[str, int]
     ) -> HuffmanNode:
-        """Create a binary tree node from the two lowest frequencies in a frequency map.
+        """Create a binary tree node from the two lowest frequencies in a
+        frequency map.
 
         Args:
             frequency_map: Dictionary mapping characters to their frequencies
@@ -185,11 +193,16 @@ class HuffmanCompressor:
         Returns:
             A HuffmanNode combining the two characters with lowest frequencies
         """
-        (char1, freq1), (char2, freq2) = find_two_lowest_frequencies(frequency_map)
+        (char1, freq1), (char2, freq2) = find_two_lowest_frequencies(
+            frequency_map
+        )
         return self.create_node_from_values(char1, freq1, char2, freq2)
 
-    def select_and_join_lowest_nodes(self, nodes: List[HuffmanNode]) -> HuffmanNode:
-        """Select the two lowest frequency nodes and join them into a new internal node.
+    def select_and_join_lowest_nodes(
+        self, nodes: List[HuffmanNode]
+    ) -> HuffmanNode:
+        """Select the two lowest frequency nodes and join them into a new
+        internal node.
 
         Args:
             nodes: List of HuffmanNode objects
@@ -203,9 +216,9 @@ class HuffmanCompressor:
     def build_huffman_tree(self, frequency_map: Dict[str, int]) -> HuffmanNode:
         """Build a complete Huffman tree from a frequency map.
 
-        Uses a heap-based approach for efficient selection of lowest weight nodes.
-        Repeatedly selects the two nodes with lowest weights and joins them
-        until only one root node remains.
+        Uses a heap-based approach for efficient selection of lowest weight
+        nodes. Repeatedly selects the two nodes with lowest weights and joins
+        them until only one root node remains.
 
         Args:
             frequency_map: Dictionary mapping characters to their frequencies
@@ -214,7 +227,9 @@ class HuffmanCompressor:
             The root node of the complete Huffman tree
         """
         # Create initial leaf nodes and build a min-heap
-        heap = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
+        heap = [
+            create_leaf_node(char, freq) for char, freq in frequency_map.items()
+        ]
         heapq.heapify(heap)
 
         # Keep combining nodes until only one remains
