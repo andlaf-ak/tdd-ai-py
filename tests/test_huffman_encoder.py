@@ -6,6 +6,37 @@ from tdd_ai_py.huffman_encoder import generate_huffman_codes
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 
 
+def _assert_codes_are_prefix_free(codes: dict[str, str]) -> None:
+    """Assert that no code is a prefix of another code."""
+    code_list = list(codes.values())
+    for i, code1 in enumerate(code_list):
+        for j, code2 in enumerate(code_list):
+            if i != j:
+                assert not code2.startswith(
+                    code1
+                ), f"Code '{code1}' is prefix of '{code2}'"
+
+
+def _assert_optimal_code_lengths(
+    codes: dict[str, str], frequencies: dict[str, int]
+) -> None:
+    """Assert that more frequent characters don't have longer codes than less frequent ones."""
+    for char1 in frequencies:
+        for char2 in frequencies:
+            if (
+                frequencies[char1] > frequencies[char2]
+            ):  # char1 is strictly more frequent
+                code1_len = len(codes[char1])
+                code2_len = len(codes[char2])
+
+                assert code1_len <= code2_len, (
+                    f"More frequent char '{char1}' (freq={frequencies[char1]}) "
+                    f"has longer code (len={code1_len}) than less frequent char "
+                    f"'{char2}' (freq={frequencies[char2]}) "
+                    f"with code length {code2_len}"
+                )
+
+
 class TestHuffmanEncoder:
     """Test cases for generating Huffman codes from tree paths."""
 
@@ -36,33 +67,7 @@ class TestHuffmanEncoder:
 
         huffman_tree = compressor.compress(text)
         codes = generate_huffman_codes(huffman_tree)
-
-        # Property 1: No code is a prefix of another (prefix-free property)
-        code_list = list(codes.values())
-        for i, code1 in enumerate(code_list):
-            for j, code2 in enumerate(code_list):
-                if i != j:
-                    assert not code2.startswith(
-                        code1
-                    ), f"Code '{code1}' is prefix of '{code2}'"
-
-        # Property 2: Characters with higher frequency should not have longer codes
-        # than characters with strictly lower frequency
         frequencies = create_frequency_map(text)
 
-        # Check that chars with higher frequency don't have longer codes than
-        # chars with strictly lower frequency
-        for char1 in frequencies:
-            for char2 in frequencies:
-                if (
-                    frequencies[char1] > frequencies[char2]
-                ):  # char1 is strictly more frequent
-                    code1_len = len(codes[char1])
-                    code2_len = len(codes[char2])
-
-                    assert code1_len <= code2_len, (
-                        f"More frequent char '{char1}' (freq={frequencies[char1]}) "
-                        f"has longer code (len={code1_len}) than less frequent char "
-                        f"'{char2}' (freq={frequencies[char2]}) "
-                        f"with code length {code2_len}"
-                    )
+        _assert_codes_are_prefix_free(codes)
+        _assert_optimal_code_lengths(codes, frequencies)
