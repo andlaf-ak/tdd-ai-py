@@ -1,9 +1,5 @@
 """Tests for the Huffman compression algorithm."""
 
-from typing import Dict
-
-import pytest
-
 from tdd_ai_py.huffman import HuffmanCompressor
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 
@@ -51,34 +47,6 @@ class TestHuffmanCompressor:
         assert result.left.weight == freq1
         assert result.right.character == char2
         assert result.right.weight == freq2
-
-    def test_creates_node_from_lowest_frequencies(self) -> None:
-        """Test that a node is created from the two lowest frequencies in a
-        frequency map."""
-        # ARRANGE
-        frequency_map = {"a": 5, "b": 2, "r": 2, "c": 1, "d": 1}
-        # The two lowest frequencies are 'c':1 and 'd':1
-        expected_weight = 2
-
-        # ACT
-        result = self.compressor.create_node_from_lowest_frequencies(
-            frequency_map
-        )
-
-        # ASSERT
-        assert isinstance(result, HuffmanNode)
-        assert result.weight == expected_weight
-
-        # Assert left and right nodes exist before accessing their attributes
-        assert result.left is not None
-        assert result.right is not None
-
-        # Should combine the two lowest frequency characters (c and d)
-        left_char = result.left.character
-        right_char = result.right.character
-        assert {left_char, right_char} == {"c", "d"}
-        assert result.left.weight == 1
-        assert result.right.weight == 1
 
     def test_selects_and_joins_two_lowest_frequency_nodes(self) -> None:
         """Test that two lowest frequency nodes are selected and joined into
@@ -155,29 +123,3 @@ class TestHuffmanCompressor:
 
         assert a_node.character == "a"
         assert internal_node.character is None
-
-    def test_create_node_from_lowest_frequencies_raises_error_with_insufficient_items(
-        self,
-    ) -> None:
-        """Test that create_node_from_lowest_frequencies raises error with
-        < 2 items."""
-        # ARRANGE
-        single_item = {"a": 1}
-
-        # ACT & ASSERT
-        with pytest.raises(
-            ValueError, match="At least two frequency entries are required"
-        ):
-            self.compressor.create_node_from_lowest_frequencies(single_item)
-
-    def test_create_node_from_lowest_frequencies_with_empty_map(self) -> None:
-        """Test that create_node_from_lowest_frequencies raises error with
-        empty map."""
-        # ARRANGE
-        empty_map: Dict[str, int] = {}
-
-        # ACT & ASSERT
-        with pytest.raises(
-            ValueError, match="At least two frequency entries are required"
-        ):
-            self.compressor.create_node_from_lowest_frequencies(empty_map)

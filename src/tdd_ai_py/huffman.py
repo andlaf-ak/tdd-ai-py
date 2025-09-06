@@ -34,19 +34,6 @@ class HuffmanCompressor:
             char1, freq1, char2, freq2
         )
 
-    def create_node_from_lowest_frequencies(
-        self, frequency_map: Dict[str, int]
-    ) -> HuffmanNode:
-        """Create a binary tree node from the two lowest frequencies in a
-        frequency map."""
-        if len(frequency_map) < 2:
-            raise ValueError("At least two frequency entries are required")
-
-        # Sort frequency map items by frequency value
-        sorted_items = sorted(frequency_map.items(), key=lambda x: x[1])
-        (char1, freq1), (char2, freq2) = sorted_items[0], sorted_items[1]
-        return self.create_node_from_values(char1, freq1, char2, freq2)
-
     def select_and_join_lowest_nodes(
         self, nodes: List[HuffmanNode]
     ) -> HuffmanNode:
