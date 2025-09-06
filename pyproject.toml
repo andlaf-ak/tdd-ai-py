@@ -21,7 +21,7 @@ exclude_lines = [
 
 [tool.flake8]
 max-line-length = 80
-extend-ignore = ["E203", "W503", "E501", "D"]
+ignore = ["E203", "W503", "E501", "D"]
 select = ["E", "W", "F", "N"]
 
 [tool.isort]
@@ -63,6 +63,9 @@ pre-commit = "^3.0.0"
 [tool.pylint.messages_control]
 disable = [
     "too-few-public-methods",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
 ]
 
 [tool.pylint.format]
