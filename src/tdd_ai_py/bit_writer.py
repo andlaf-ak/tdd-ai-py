@@ -1,5 +1,4 @@
 class BitWriter:
-
     def __init__(self) -> None:
         self._buffer = 0
         self._bit_count = 0
