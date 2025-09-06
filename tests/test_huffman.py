@@ -69,3 +69,33 @@ class TestHuffmanCompressor:
         assert {left_char, right_char} == {"c", "d"}
         assert result.left.weight == 1
         assert result.right.weight == 1
+
+    def test_selects_and_joins_two_lowest_frequency_nodes(self) -> None:
+        """Test that two lowest frequency nodes are selected and joined into a new internal node."""
+        # ARRANGE
+        node1 = HuffmanNode(weight=1, character="c")
+        node2 = HuffmanNode(weight=1, character="d")
+        node3 = HuffmanNode(weight=2, character="b")
+        node4 = HuffmanNode(weight=5, character="a")
+        nodes = [node1, node2, node3, node4]
+
+        # ACT
+        result = self.compressor.select_and_join_lowest_nodes(nodes)
+
+        # ASSERT
+        assert isinstance(result, HuffmanNode)
+        assert result.weight == 2  # 1 + 1
+        assert result.character is None  # Internal node has no character
+
+        # Assert children exist and contain the two lowest frequency nodes
+        assert result.left is not None
+        assert result.right is not None
+
+        # The children should be the original nodes with frequencies 1
+        left_weight = result.left.weight
+        right_weight = result.right.weight
+        assert {left_weight, right_weight} == {1, 1}
+
+        left_char = result.left.character
+        right_char = result.right.character
+        assert {left_char, right_char} == {"c", "d"}
