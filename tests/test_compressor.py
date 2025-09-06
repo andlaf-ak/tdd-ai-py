@@ -23,3 +23,16 @@ class TestHuffmanCompressor:
         assert huffman_tree.character is None
         assert huffman_tree.left is not None
         assert huffman_tree.right is not None
+
+    def test_compresses_single_character_input(self) -> None:
+        """Test that single character input produces tree with only root node."""
+        input_text = "a"
+
+        huffman_tree = self.compressor.compress(input_text)
+
+        assert isinstance(huffman_tree, HuffmanNode)
+        assert huffman_tree.weight == 1
+        assert huffman_tree.is_leaf
+        assert huffman_tree.character == "a"
+        assert huffman_tree.left is None
+        assert huffman_tree.right is None
