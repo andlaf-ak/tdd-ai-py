@@ -65,8 +65,7 @@ exclude_lines = [
 
 [tool.pylint.messages_control]
 disable = [
-    "C0330",  # Wrong hanging indentation
-    "C0326",  # Bad whitespace
+    "too-few-public-methods",
 ]
 
 [tool.pylint.format]
