@@ -1,38 +1,33 @@
 """Tests for the Huffman compressor."""
 
+from io import BytesIO, StringIO
+
 from tdd_ai_py.compressor import HuffmanCompressor
-from tdd_ai_py.huffman_tree_builder import HuffmanNode
 
 
 class TestHuffmanCompressor:
     """Test cases for the HuffmanCompressor class."""
 
-    def setup_method(self) -> None:
-        """Set up test fixtures before each test method."""
-        self.compressor = HuffmanCompressor()
+    def test_compresses_single_character_to_byte_stream(self) -> None:
+        """Test that single character produces: length(4 bytes) + serialized tree + encoded data."""
+        input_stream = StringIO("a")
+        output_stream = BytesIO()
+        compressor = HuffmanCompressor()
 
-    def test_compresses_basic_input_successfully(self) -> None:
-        """Test that compressor can process input text and create huffman tree."""
-        input_text = "she sells seashells on the seashore"
+        compressor.compress(input_stream, output_stream)
 
-        huffman_tree = self.compressor.compress(input_text)
+        output_stream.seek(0)
+        result = output_stream.read()
 
-        assert isinstance(huffman_tree, HuffmanNode)
-        assert huffman_tree.weight == len(input_text)
-        assert not huffman_tree.is_leaf
-        assert huffman_tree.character is None
-        assert huffman_tree.left is not None
-        assert huffman_tree.right is not None
-
-    def test_compresses_single_character_input(self) -> None:
-        """Test that single character input produces tree with only root node."""
-        input_text = "a"
-
-        huffman_tree = self.compressor.compress(input_text)
-
-        assert isinstance(huffman_tree, HuffmanNode)
-        assert huffman_tree.weight == 1
-        assert huffman_tree.is_leaf
-        assert huffman_tree.character == "a"
-        assert huffman_tree.left is None
-        assert huffman_tree.right is None
+        # Expected format:
+        # - First 4 bytes: length = 1 (0x00000001 in big-endian)
+        # - Serialized tree: "1" + 8-bit 'a' = "101100001" (9 bits)
+        # - Encoded data: "0" (1 bit, code for single character)
+        # Total: 9 + 1 = 10 bits of tree+data, padded to 16 bits = 2 bytes
+        # Tree+data bits: "1011000010" padded to "1011000010000000"
+        expected = bytes(
+            [0, 0, 0, 1]
+        ) + bytes(  # Length: 1 (4 bytes, big-endian)
+            [0xB0, 0x80]
+        )  # "1011000010000000" = 0xB080
+        assert result == expected

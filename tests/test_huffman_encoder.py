@@ -1,9 +1,8 @@
 """Tests for Huffman code generation from tree paths."""
 
-from tdd_ai_py.compressor import HuffmanCompressor
 from tdd_ai_py.frequency_counter import create_frequency_map
 from tdd_ai_py.huffman_encoder import generate_huffman_codes
-from tdd_ai_py.huffman_tree_builder import HuffmanNode
+from tdd_ai_py.huffman_tree_builder import HuffmanNode, build_huffman_tree
 
 
 def _assert_codes_are_prefix_free(codes: dict[str, str]) -> None:
@@ -63,11 +62,10 @@ class TestHuffmanEncoder:
     ) -> None:
         """Test that Huffman codes satisfy prefix property and length optimality."""
         text = "she sells seashells on the seashore"
-        compressor = HuffmanCompressor()
 
-        huffman_tree = compressor.compress(text)
-        codes = generate_huffman_codes(huffman_tree)
         frequencies = create_frequency_map(text)
+        huffman_tree = build_huffman_tree(frequencies)
+        codes = generate_huffman_codes(huffman_tree)
 
         _assert_codes_are_prefix_free(codes)
         _assert_optimal_code_lengths(codes, frequencies)
