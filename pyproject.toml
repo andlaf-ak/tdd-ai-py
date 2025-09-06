@@ -8,7 +8,7 @@ skips = ["B101"]  # Skip assert_used test
 
 [tool.black]
 line-length = 80
-target-version = ['py313']
+target-version = ['py312']
 include = '\.pyi?$'
 
 [tool.coverage.report]

@@ -4,7 +4,6 @@ from tdd_ai_py.frequency_counter import create_frequency_map
 
 
 class TestCreateFrequencyMap:
-
     def test_creates_frequency_map_from_input_string(self) -> None:
         input_string = "abracadabra"
         expected_frequency_map: Dict[str, int] = {
