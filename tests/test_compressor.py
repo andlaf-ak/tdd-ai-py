@@ -13,19 +13,12 @@ class TestHuffmanCompressor:
 
     def test_compresses_basic_input_successfully(self) -> None:
         """Test that compressor can process input text and create huffman tree."""
-        # ARRANGE
         input_text = "she sells seashells on the seashore"
 
-        # ACT
         huffman_tree = self.compressor.compress(input_text)
 
-        # ASSERT
         assert isinstance(huffman_tree, HuffmanNode)
-        assert huffman_tree.weight == len(
-            input_text
-        )  # Total weight = input length
-
-        # Root should be an internal node (for multi-character input)
+        assert huffman_tree.weight == len(input_text)
         assert not huffman_tree.is_leaf
         assert huffman_tree.character is None
         assert huffman_tree.left is not None

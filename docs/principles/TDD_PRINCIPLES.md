@@ -32,18 +32,15 @@
 
 ## Test Quality Standards
 
-### Test Structure (AAA Pattern)
+### Test Structure
 ```
 def test_feature_description():
-    // ARRANGE - Set up test data and conditions
     calculator = Calculator()
     first_number = 5
     second_number = 3
 
-    // ACT - Execute the behavior being tested
     result = calculator.add(first_number, second_number)
 
-    // ASSERT - Verify the expected outcome
     assert result == 8
 ```
 
@@ -130,10 +127,10 @@ def test_feature_description():
 
 ## Test Design Principles
 
-### Arrange-Act-Assert (AAA) Pattern
-- **Arrange**: Set up test data and initial conditions
-- **Act**: Execute the behavior being tested
-- **Assert**: Verify the expected outcome
+### Test Structure Pattern
+- Set up test data and initial conditions
+- Execute the behavior being tested
+- Verify the expected outcome
 
 ### One Assertion Per Test (Generally)
 - Focus each test on one specific behavior

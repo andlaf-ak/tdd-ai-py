@@ -2,19 +2,16 @@
 
 ## Python-Specific TDD Implementation
 
-### Test Structure (Python AAA Pattern)
+### Test Structure (Python Pattern)
 ```python
 def test_returns_sum_when_adding_positive_numbers(self) -> None:
     """Clear description of what behavior is being tested."""
-    # ARRANGE - Set up test data and conditions
     calculator = Calculator()
     first_number = 5
     second_number = 3
 
-    # ACT - Execute the behavior being tested
     result = calculator.add(first_number, second_number)
 
-    # ASSERT - Verify the expected outcome
     assert result == 8
 ```
 
