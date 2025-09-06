@@ -45,4 +45,15 @@ huffman_tree = compressor.build_huffman_tree(frequency_map)
 
 - `src/tdd_ai_py/huffman.py` - Huffman compression implementation
 - `tests/test_huffman.py` - Comprehensive test suite
+- `docs/` - Project documentation
+  - `principles/` - Development principles and best practices
+  - `dev/` - Development setup and tooling guides
 - `pyproject.toml` - Project configuration and dependencies
+
+## 📚 Documentation
+
+For detailed documentation, see the [`docs/`](./docs/) directory:
+
+- **[Development Principles](./docs/principles/)** - Coding standards and TDD methodology
+- **[Development Setup](./docs/dev/)** - Tooling and workflow instructions
+- **[Documentation Index](./docs/README.md)** - Complete documentation overview
