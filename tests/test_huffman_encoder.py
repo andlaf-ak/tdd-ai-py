@@ -1,5 +1,7 @@
 """Tests for Huffman code generation from tree paths."""
 
+from tdd_ai_py.compressor import HuffmanCompressor
+from tdd_ai_py.frequency_counter import create_frequency_map
 from tdd_ai_py.huffman_encoder import generate_huffman_codes
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 
@@ -24,3 +26,43 @@ class TestHuffmanEncoder:
         codes = generate_huffman_codes(root_node)
 
         assert codes == {"a": "0", "b": "1"}
+
+    def test_huffman_codes_have_prefix_property_and_optimal_lengths(
+        self,
+    ) -> None:
+        """Test that Huffman codes satisfy prefix property and length optimality."""
+        text = "she sells seashells on the seashore"
+        compressor = HuffmanCompressor()
+
+        huffman_tree = compressor.compress(text)
+        codes = generate_huffman_codes(huffman_tree)
+
+        # Property 1: No code is a prefix of another (prefix-free property)
+        code_list = list(codes.values())
+        for i, code1 in enumerate(code_list):
+            for j, code2 in enumerate(code_list):
+                if i != j:
+                    assert not code2.startswith(
+                        code1
+                    ), f"Code '{code1}' is prefix of '{code2}'"
+
+        # Property 2: Characters with higher frequency should not have longer codes
+        # than characters with strictly lower frequency
+        frequencies = create_frequency_map(text)
+
+        # Check that chars with higher frequency don't have longer codes than
+        # chars with strictly lower frequency
+        for char1 in frequencies:
+            for char2 in frequencies:
+                if (
+                    frequencies[char1] > frequencies[char2]
+                ):  # char1 is strictly more frequent
+                    code1_len = len(codes[char1])
+                    code2_len = len(codes[char2])
+
+                    assert code1_len <= code2_len, (
+                        f"More frequent char '{char1}' (freq={frequencies[char1]}) "
+                        f"has longer code (len={code1_len}) than less frequent char "
+                        f"'{char2}' (freq={frequencies[char2]}) "
+                        f"with code length {code2_len}"
+                    )
