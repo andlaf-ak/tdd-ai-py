@@ -78,31 +78,6 @@ class TestHuffmanTreeBuilder:
         """Set up test fixtures before each test method."""
         self.builder = HuffmanTreeBuilder()
 
-    def test_creates_binary_tree_node_from_two_values(self) -> None:
-        """Test that a binary tree node is created from two frequency values."""
-        # ARRANGE
-        char1, freq1 = "c", 1
-        char2, freq2 = "d", 1
-        expected_weight = 2
-
-        # ACT
-        result = self.builder.create_node_from_values(
-            char1, freq1, char2, freq2
-        )
-
-        # ASSERT
-        assert isinstance(result, HuffmanNode)
-        assert result.weight == expected_weight
-
-        # Assert left and right nodes exist before accessing their attributes
-        assert result.left is not None
-        assert result.right is not None
-
-        assert result.left.character == char1
-        assert result.left.weight == freq1
-        assert result.right.character == char2
-        assert result.right.weight == freq2
-
     def test_selects_and_joins_two_lowest_frequency_nodes(self) -> None:
         """Test that two lowest frequency nodes are selected and joined."""
         # ARRANGE

@@ -55,13 +55,6 @@ def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
 
 class HuffmanTreeBuilder:
 
-    def create_node_from_values(
-        self, char1: str, freq1: int, char2: str, freq2: int
-    ) -> HuffmanNode:
-        left_node = create_leaf_node(char1, freq1)
-        right_node = create_leaf_node(char2, freq2)
-        return create_internal_node(left_node, right_node)
-
     def select_and_join_lowest_nodes(
         self, nodes: List[HuffmanNode]
     ) -> HuffmanNode:
