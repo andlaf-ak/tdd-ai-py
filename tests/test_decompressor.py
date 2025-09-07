@@ -35,12 +35,12 @@ def _create_test_data(
 
 class TestDecompressor:
     @pytest.mark.parametrize(
-        "length, tree_bits, expected_is_leaf, expected_char, expected_left_char",
+        "length, tree_bits, data_bits, expected_char, expected_left_char, expected_decoded",
         [
-            # Single character 'a': Tree "101100001" (9 bits)
-            (1, "101100001", True, "a", None),
+            # Single character 'a': Tree "101100001" (9 bits) + data "000000" (6 bits for "aaaaaa")
+            (6, "101100001", "000000", "a", None, "aaaaaa"),
             # Two symbols 'a'/'b': Tree "0" + "1" + "01100001" + "1" + "01100010" (19 bits)
-            (12, "0101100001101100010", False, None, "a"),
+            (12, "0101100001101100010", "000111001101", None, "a", None),
         ],
         ids=["single_character", "two_symbols"],
     )
@@ -48,13 +48,12 @@ class TestDecompressor:
         self,
         length: int,
         tree_bits: str,
-        expected_is_leaf: bool,
+        data_bits: str,
         expected_char: str | None,
         expected_left_char: str | None,
+        expected_decoded: str | None,
     ) -> None:
         """Test decompression of various tree structures."""
-        # For two-symbol test, add some dummy data bits
-        data_bits = "000111001101" if not expected_is_leaf else ""
         data_bytes = _create_test_data(length, tree_bits, data_bits)
 
         data_stream = BytesIO(data_bytes)
@@ -67,10 +66,12 @@ class TestDecompressor:
 
         # Verify tree deserialization
         tree = decompressor.get_tree()
-        assert tree.is_leaf == expected_is_leaf
 
-        if expected_is_leaf:
+        if tree.is_leaf:
             assert tree.character == expected_char
+            # Test the new decode functionality
+            decoded_text = decompressor.get_decoded_text()
+            assert decoded_text == expected_decoded
         else:
             assert tree.character == expected_char
             assert tree.left is not None
