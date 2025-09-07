@@ -12,9 +12,13 @@ Example:
 """
 
 import sys
+from pathlib import Path
 from typing import BinaryIO
 
-from src.tdd_ai_py.compressor import HuffmanCompressor
+# Add src directory to Python path so we can import tdd_ai_py
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+
+from tdd_ai_py.compressor import HuffmanCompressor  # noqa: E402
 
 
 def main() -> None:

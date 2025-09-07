@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 
-from tdd_ai_py.decompressor import Decompressor
+from tdd_ai_py.decompressor import HuffmanDecompressor
 
 from .test_helpers import bits_and_bytes
 
@@ -58,7 +58,7 @@ class TestDecompressor:
 
         data_stream = BytesIO(data_bytes)
         output_stream = BytesIO()
-        decompressor = Decompressor()
+        decompressor = HuffmanDecompressor()
 
         decompressor.decompress(data_stream, output_stream)
 

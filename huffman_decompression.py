@@ -13,9 +13,13 @@ Example:
 
 import sys
 from io import BytesIO
+from pathlib import Path
 from typing import BinaryIO
 
-from src.tdd_ai_py.decompressor import Decompressor
+# Add src directory to Python path so we can import tdd_ai_py
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+
+from tdd_ai_py.decompressor import HuffmanDecompressor  # noqa: E402
 
 
 def main() -> None:
@@ -39,7 +43,7 @@ def main() -> None:
             output_stream: BinaryIO = sys.stdout.buffer
 
             # Create decompressor and decompress the file
-            decompressor = Decompressor()
+            decompressor = HuffmanDecompressor()
             decompressor.decompress(input_stream, output_stream)
 
     except FileNotFoundError:

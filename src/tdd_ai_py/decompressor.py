@@ -8,7 +8,7 @@ from .huffman_tree_builder import HuffmanNode
 from .tree_deserializer import deserialize_tree
 
 
-class Decompressor:
+class HuffmanDecompressor:
     def __init__(self) -> None:
         self._length: Optional[int] = None
         self._tree: Optional[HuffmanNode] = None

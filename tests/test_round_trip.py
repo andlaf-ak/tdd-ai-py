@@ -8,7 +8,7 @@ from io import BytesIO
 import pytest
 
 from tdd_ai_py.compressor import HuffmanCompressor
-from tdd_ai_py.decompressor import Decompressor
+from tdd_ai_py.decompressor import HuffmanDecompressor
 
 
 class TestRoundTrip:
@@ -63,7 +63,7 @@ consequuntur magni dolores eos qui ratione voluptate sequi nesciunt.""",
         # Decompress the data
         compressed_input = BytesIO(compressed_data)
         decompressed_stream = BytesIO()
-        decompressor = Decompressor()
+        decompressor = HuffmanDecompressor()
         decompressor.decompress(compressed_input, decompressed_stream)
         decompressed_bytes = decompressed_stream.getvalue()
 
