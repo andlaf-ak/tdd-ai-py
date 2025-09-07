@@ -1,11 +1,11 @@
-from io import StringIO
+from io import BytesIO
 
 from tdd_ai_py.bit_reader import BitReader
 
 
 class TestBitReader:
     def test_reads_single_bit_from_stream(self) -> None:
-        input_stream = StringIO("a")
+        input_stream = BytesIO(b"a")
         bit_reader = BitReader(input_stream)
 
         result = bit_reader.read_bit()

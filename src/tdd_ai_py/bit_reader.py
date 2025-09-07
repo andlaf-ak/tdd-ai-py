@@ -1,8 +1,8 @@
-from io import StringIO
+from io import BytesIO
 
 
 class BitReader:
-    def __init__(self, input_stream: StringIO):
+    def __init__(self, input_stream: BytesIO):
         self._input_stream = input_stream
         self._buffer = 0
         self._bits_in_buffer = 0
@@ -17,8 +17,8 @@ class BitReader:
         return self._bits_in_buffer == 0
 
     def _load_next_byte(self) -> None:
-        char = self._input_stream.read(1)
-        self._buffer = ord(char)
+        byte_data = self._input_stream.read(1)
+        self._buffer = byte_data[0]
         self._bits_in_buffer = 8
 
     def _extract_next_bit(self) -> int:
