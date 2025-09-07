@@ -1,6 +1,6 @@
 import struct
 from io import BytesIO
-from typing import List, Optional, cast
+from typing import Optional, cast
 
 from .bit_reader import BitReader
 from .data_decoder import decode_data
@@ -20,8 +20,7 @@ class Decompressor:
         bit_reader = BitReader(data_stream)
         self._tree = deserialize_tree(bit_reader)
 
-        data_bits = self._read_remaining_data_bits(bit_reader)
-        self._decoded_text = decode_data(self._tree, data_bits, self._length)
+        self._decoded_text = decode_data(self._tree, bit_reader, self._length)
 
     def get_length(self) -> int:
         assert self._length is not None
@@ -38,15 +37,3 @@ class Decompressor:
     def _read_big_endian_int(self, stream: BytesIO) -> int:
         bytes_data: bytes = stream.read(4)
         return cast(int, struct.unpack(">I", bytes_data)[0])
-
-    def _read_remaining_data_bits(self, bit_reader: BitReader) -> List[int]:
-        """Read all remaining bits from the bit reader until end of stream."""
-        data_bits: List[int] = []
-        while True:
-            try:
-                bit = bit_reader.read_bit()
-                data_bits.append(bit)
-            except (IndexError, EOFError):
-                # End of stream reached
-                break
-        return data_bits

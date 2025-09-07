@@ -1,13 +1,12 @@
-from typing import List
-
+from .bit_reader import BitReader
 from .huffman_tree_builder import HuffmanNode
 
 
-def decode_data(root: HuffmanNode, bits: List[int], length: int) -> str:
+def decode_data(root: HuffmanNode, bit_reader: BitReader, length: int) -> str:
     if root.is_leaf:
         return _decode_single_character_data(root, length)
 
-    return _decode_multi_character_data(root, bits, length)
+    return _decode_multi_character_data(root, bit_reader, length)
 
 
 def _decode_single_character_data(root: HuffmanNode, length: int) -> str:
@@ -17,10 +16,10 @@ def _decode_single_character_data(root: HuffmanNode, length: int) -> str:
 
 
 def _decode_multi_character_data(
-    root: HuffmanNode, bits: List[int], length: int
+    root: HuffmanNode, bit_reader: BitReader, length: int
 ) -> str:
     decoder = _CompressedDataDecoder(root, length)
-    return decoder.decode(bits)
+    return decoder.decode(bit_reader)
 
 
 class _CompressedDataDecoder:
@@ -31,11 +30,14 @@ class _CompressedDataDecoder:
         self._result = ""
         self._characters_decoded = 0
 
-    def decode(self, bits: List[int]) -> str:
-        for bit in bits:
-            if self._should_stop_decoding():
+    def decode(self, bit_reader: BitReader) -> str:
+        while not self._should_stop_decoding():
+            try:
+                bit = bit_reader.read_bit()
+                self._process_bit(bit)
+            except (IndexError, EOFError):
+                # End of stream reached
                 break
-            self._process_bit(bit)
         return self._result
 
     def _should_stop_decoding(self) -> bool:
