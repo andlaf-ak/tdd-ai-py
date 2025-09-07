@@ -5,12 +5,12 @@ import pytest
 
 from tdd_ai_py.decompressor import Decompressor
 
-from .test_helpers import bits
+from .test_helpers import bits_and_bytes
 
 
 def _bits_to_bytes(bit_string: str) -> bytes:
     """Convert bit string to bytes with padding."""
-    bit_list = bits(bit_string)
+    bit_list, _ = bits_and_bytes(bit_string)
     # Pad to byte boundary
     while len(bit_list) % 8 != 0:
         bit_list.append(0)

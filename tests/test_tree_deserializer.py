@@ -7,7 +7,7 @@ from tdd_ai_py.bit_reader import BitReader
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 from tdd_ai_py.tree_deserializer import deserialize_tree
 
-from .test_helpers import bits
+from .test_helpers import bits_and_bytes
 
 
 def _bits_to_byte_stream(bit_list: List[int]) -> BytesIO:
@@ -90,13 +90,13 @@ class TestTreeDeserializer:
     @pytest.mark.parametrize(
         "serialized_tree, validator",
         [
-            (bits("1" + "01100001"), _validate_single_a),
+            (bits_and_bytes("1" + "01100001")[0], _validate_single_a),
             (
-                bits("0" + "1" + "01100001" + "1" + "01100010"),
+                bits_and_bytes("0" + "1" + "01100001" + "1" + "01100010")[0],
                 _validate_binary_ab,
             ),
             (
-                bits(
+                bits_and_bytes(
                     "0"
                     + "1"
                     + "01100001"
@@ -105,7 +105,7 @@ class TestTreeDeserializer:
                     + "01100010"
                     + "1"
                     + "01100011"
-                ),
+                )[0],
                 _validate_complex_tree,
             ),
         ],

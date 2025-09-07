@@ -7,6 +7,8 @@ from tdd_ai_py.bit_reader import BitReader
 from tdd_ai_py.data_decoder import decode_data
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 
+from .test_helpers import bits_and_bytes
+
 
 def _create_single_character_tree() -> HuffmanNode:
     return HuffmanNode(weight=1, character="a")
@@ -30,27 +32,12 @@ def _create_three_character_tree() -> HuffmanNode:
 
 class TestDataDecoder:
     @pytest.mark.parametrize(
-        "tree_builder, data_bytes, length, expected",
+        "tree_builder, data_bits, length, expected",
         [
-            (
-                _create_single_character_tree,
-                b"\x00",
-                1,
-                "a",
-            ),  # "0" padded to "00000000"
-            (_create_two_character_tree, b"\x63", 8, "abbaaabb"),  # "01100011"
-            (
-                _create_three_character_tree,
-                b"\xBB\x20",
-                7,
-                "bcbcaab",
-            ),  # "101110110010" + padding
-            (
-                _create_three_character_tree,
-                b"\xBB\x20",  # "1011101100100000"
-                7,
-                "bcbcaab",
-            ),
+            (_create_single_character_tree, "0", 1, "a"),
+            (_create_two_character_tree, "01100011", 8, "abbaaabb"),
+            (_create_three_character_tree, "101110110010", 7, "bcbcaab"),
+            (_create_three_character_tree, "101110110010", 7, "bcbcaab"),
         ],
         ids=[
             "single_character",
@@ -62,11 +49,12 @@ class TestDataDecoder:
     def test_decodes_data(
         self,
         tree_builder: Callable[[], HuffmanNode],
-        data_bytes: bytes,
+        data_bits: str,
         length: int,
         expected: str,
     ) -> None:
         tree = tree_builder()
+        _, data_bytes = bits_and_bytes(data_bits)
         bit_reader = BitReader(BytesIO(data_bytes))
         result = decode_data(tree, bit_reader, length)
         assert result == expected
