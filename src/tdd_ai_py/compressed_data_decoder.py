@@ -1,34 +1,72 @@
+from typing import Optional
+
 from .huffman_tree_builder import HuffmanNode
 
 
-def decode_compressed_data(root: HuffmanNode, bits: str) -> str:
+def decode_compressed_data(
+    root: HuffmanNode, bits: str, length: Optional[int] = None
+) -> str:
     if root.is_leaf:
-        return _decode_single_node_tree(root)
+        return _decode_single_character_data(root)
 
-    return _decode_multi_node_tree(root, bits)
+    return _decode_multi_character_data(root, bits, length)
 
 
-def _decode_single_node_tree(root: HuffmanNode) -> str:
-    if root.character is None:
-        raise ValueError("Leaf node must have a character")
-
+def _decode_single_character_data(root: HuffmanNode) -> str:
+    _validate_leaf_has_character(root)
+    assert root.character is not None  # After validation, we know it's not None
     return _character_to_8bit_ascii(root.character)
 
 
-def _decode_multi_node_tree(root: HuffmanNode, bits: str) -> str:
-    result: str = ""
-    current_node: HuffmanNode = root
+def _decode_multi_character_data(
+    root: HuffmanNode, bits: str, length: Optional[int]
+) -> str:
+    decoder = _CompressedDataDecoder(root, length)
+    return decoder.decode(bits)
 
-    for bit in bits:
-        current_node = _traverse_tree(current_node, bit)
 
-        if current_node.is_leaf:
-            if current_node.character is None:
-                raise ValueError("Leaf node must have a character")
-            result += current_node.character
-            current_node = root
+class _CompressedDataDecoder:
+    def __init__(self, root: HuffmanNode, length: Optional[int]):
+        self._root = root
+        self._length = length
+        self._current_node = root
+        self._result = ""
+        self._characters_decoded = 0
 
-    return result
+    def decode(self, bits: str) -> str:
+        for bit in bits:
+            if self._should_stop_decoding():
+                break
+            self._process_bit(bit)
+        return self._result
+
+    def _should_stop_decoding(self) -> bool:
+        return (
+            self._length is not None
+            and self._characters_decoded >= self._length
+        )
+
+    def _process_bit(self, bit: str) -> None:
+        self._current_node = _traverse_tree(self._current_node, bit)
+        if self._current_node.is_leaf:
+            self._add_decoded_character()
+            self._reset_to_root()
+
+    def _add_decoded_character(self) -> None:
+        _validate_leaf_has_character(self._current_node)
+        assert (
+            self._current_node.character is not None
+        )  # After validation, we know it's not None
+        self._result += self._current_node.character
+        self._characters_decoded += 1
+
+    def _reset_to_root(self) -> None:
+        self._current_node = self._root
+
+
+def _validate_leaf_has_character(node: HuffmanNode) -> None:
+    if node.character is None:
+        raise ValueError("Leaf node must have a character")
 
 
 def _traverse_tree(node: HuffmanNode, bit: str) -> HuffmanNode:

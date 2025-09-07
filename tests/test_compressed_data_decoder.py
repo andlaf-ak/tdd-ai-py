@@ -50,3 +50,15 @@ class TestCompressedDataDecoder:
         tree = tree_builder()
         result = decode_compressed_data(tree, bits)
         assert result == expected
+
+    def test_decodes_compressed_data_with_length_limit(self) -> None:
+        """Test that decoder stops after decoding specified number of characters."""
+        # Tree: a=0, b=10, c=11
+        tree = _create_three_character_tree()
+        bits = "1011101100100000"  # bcbcaab + padding bits
+        length = 7
+
+        result = decode_compressed_data(tree, bits, length)
+
+        expected = "bcbcaab"  # Should stop after 7 characters, ignore padding
+        assert result == expected
