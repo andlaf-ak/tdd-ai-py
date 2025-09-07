@@ -70,7 +70,3 @@ def _traverse_tree(node: HuffmanNode, bit: str) -> HuffmanNode:
     if node.right is None:
         raise ValueError("Invalid tree structure: missing right child")
     return node.right
-
-
-def _character_to_8bit_ascii(character: str) -> str:
-    return format(ord(character), "08b")
