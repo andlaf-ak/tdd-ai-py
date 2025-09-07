@@ -1,56 +1,52 @@
 """Tests for compressed data decoder that traverses tree using bits."""
 
+from typing import Callable
+
+import pytest
+
 from tdd_ai_py.compressed_data_decoder import decode_compressed_data
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
+
+
+def _create_single_character_tree() -> HuffmanNode:
+    """Create tree with single character 'a'."""
+    return HuffmanNode(weight=1, character="a")
+
+
+def _create_two_character_tree() -> HuffmanNode:
+    """Create binary tree with 'a' (left) and 'b' (right)."""
+    left_a = HuffmanNode(weight=1, character="a")
+    right_b = HuffmanNode(weight=1, character="b")
+    return HuffmanNode(weight=2, left=left_a, right=right_b)
+
+
+def _create_three_character_tree() -> HuffmanNode:
+    """Create complex tree with 'a' (0), 'b' (10), 'c' (11)."""
+    left_a = HuffmanNode(weight=1, character="a")
+    right_internal_left_b = HuffmanNode(weight=1, character="b")
+    right_internal_right_c = HuffmanNode(weight=1, character="c")
+    right_internal = HuffmanNode(
+        weight=2, left=right_internal_left_b, right=right_internal_right_c
+    )
+    return HuffmanNode(weight=3, left=left_a, right=right_internal)
 
 
 class TestCompressedDataDecoder:
     """Test cases for compressed data decoder algorithm."""
 
-    def test_decodes_single_bit_with_root_only_tree(self) -> None:
-        """Test that bit '0' with root-only tree emits the root's character."""
-        # Tree with only root node containing 'a'
-        root = HuffmanNode(weight=1, character="a")
-        bits = "0"
-
-        result = decode_compressed_data(root, bits)
-
-        # Should emit the 8-bit ASCII for 'a' = 01100001
-        expected = "01100001"
-        assert result == expected
-
-    def test_decodes_binary_tree_with_multiple_characters(self) -> None:
-        """Test decoding bits 01100011 with binary tree (a=0, b=1) -> abbaaabb."""
-        # Tree: root -> left('a'), right('b')
-        left_a = HuffmanNode(weight=1, character="a")
-        right_b = HuffmanNode(weight=1, character="b")
-        root = HuffmanNode(weight=2, left=left_a, right=right_b)
-        bits = "01100011"
-
-        result = decode_compressed_data(root, bits)
-
-        expected = "abbaaabb"
-        assert result == expected
-
-    def test_decodes_complex_tree_with_nested_internal_node(self) -> None:
-        """Test decoding bits 101110110010 with complex tree -> bcbcaab."""
-        # Tree structure:
-        #       root (internal)
-        #      /              \
-        #   'a' (leaf)    internal node
-        #                    /        \
-        #                'b' (leaf)  'c' (leaf)
-        # Codes: a=0, b=10, c=11
-        left_a = HuffmanNode(weight=1, character="a")
-        right_internal_left_b = HuffmanNode(weight=1, character="b")
-        right_internal_right_c = HuffmanNode(weight=1, character="c")
-        right_internal = HuffmanNode(
-            weight=2, left=right_internal_left_b, right=right_internal_right_c
-        )
-        root = HuffmanNode(weight=3, left=left_a, right=right_internal)
-        bits = "101110110010"
-
-        result = decode_compressed_data(root, bits)
-
-        expected = "bcbcaab"
+    @pytest.mark.parametrize(
+        "tree_builder, bits, expected",
+        [
+            (_create_single_character_tree, "0", "01100001"),
+            (_create_two_character_tree, "01100011", "abbaaabb"),
+            (_create_three_character_tree, "101110110010", "bcbcaab"),
+        ],
+        ids=["single_character", "two_characters", "three_characters"],
+    )
+    def test_decodes_compressed_data(
+        self, tree_builder: Callable[[], HuffmanNode], bits: str, expected: str
+    ) -> None:
+        """Test compressed data decoding for various character scenarios."""
+        tree = tree_builder()
+        result = decode_compressed_data(tree, bits)
         assert result == expected
