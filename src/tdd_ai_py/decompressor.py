@@ -23,14 +23,6 @@ class HuffmanDecompressor:
 
         decode_data(self._tree, bit_reader, self._length, output_stream)
 
-    def get_length(self) -> int:
-        assert self._length is not None
-        return self._length
-
-    def get_tree(self) -> HuffmanNode:
-        assert self._tree is not None
-        return self._tree
-
     def _read_big_endian_int(self, stream: BytesIO) -> int:
         bytes_data: bytes = stream.read(4)
         return cast(int, struct.unpack(">I", bytes_data)[0])
