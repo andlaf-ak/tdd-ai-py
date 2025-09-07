@@ -1,6 +1,5 @@
 import heapq
-from dataclasses import dataclass
-from typing import Callable, Dict, List, Optional, Tuple, TypeVar
+from typing import Callable, Dict, List, Tuple, TypeVar
 
 T = TypeVar("T")
 
@@ -18,12 +17,18 @@ def find_two_lowest_items(
     return sorted_items[0], sorted_items[1]
 
 
-@dataclass(frozen=True)
 class HuffmanNode:
-    weight: int
-    character: Optional[str] = None
-    left: Optional["HuffmanNode"] = None
-    right: Optional["HuffmanNode"] = None
+    def __init__(
+        self,
+        weight: int,
+        character: str | None = None,
+        left: "HuffmanNode | None" = None,
+        right: "HuffmanNode | None" = None,
+    ):
+        self.weight = weight
+        self.character = character
+        self.left = left
+        self.right = right
 
     @property
     def is_leaf(self) -> bool:
