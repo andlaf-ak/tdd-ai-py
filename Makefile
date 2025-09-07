@@ -16,6 +16,13 @@ test: ## Run tests
 test-cov: ## Run tests with coverage
 	poetry run pytest --cov=src/tdd_ai_py --cov-report=term-missing
 
+test-compression: ## Run compression/decompression round-trip tests
+	./test_compression.sh
+
+test-all: ## Run all tests (unit tests + compression tests)
+	poetry run pytest
+	./test_compression.sh
+
 # Code quality
 lint: ## Check code quality
 	poetry run black --check src/ tests/
@@ -38,4 +45,4 @@ clean: ## Clean build artifacts
 	rm -rf .pytest_cache/ .mypy_cache/ .coverage htmlcov/
 
 # CI pipeline
-ci: install lint test-cov ## Run CI pipeline locally
+ci: install lint test-cov test-compression ## Run CI pipeline locally

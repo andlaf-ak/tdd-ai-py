@@ -58,6 +58,14 @@ repos:
         always_run: true
         stages: [pre-commit]
 
+      - id: compression-test
+        name: compression round-trip test
+        entry: ./test_compression.sh
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
       - id: pytest-coverage
         name: pytest with coverage
         entry: poetry run pytest tests/ -v --cov=src/tdd_ai_py --cov-report=term-missing

@@ -212,7 +212,7 @@ run_tests() {
     # Clean up test files
     rm -f *.txt
     cd ..
-    rmdir "$TEST_DIR"
+    rm -rf "$TEST_DIR"
 }
 
 # Function to print test summary
