@@ -1,5 +1,3 @@
-"""Tests for Huffman tree deserialization from bit strings."""
-
 from typing import Callable
 
 import pytest
@@ -9,7 +7,6 @@ from tdd_ai_py.tree_deserializer import deserialize_tree
 
 
 def _validate_single_leaf(node: HuffmanNode, expected_char: str) -> None:
-    """Validate single leaf node."""
     assert node.character == expected_char
     assert node.weight == 0
     assert node.left is None
@@ -20,7 +17,6 @@ def _validate_single_leaf(node: HuffmanNode, expected_char: str) -> None:
 def _validate_binary_tree(
     node: HuffmanNode, left_char: str, right_char: str
 ) -> None:
-    """Validate binary tree with two leaf children."""
     # Root should be internal node
     assert node.character is None
     assert node.weight == 0
@@ -36,7 +32,6 @@ def _validate_binary_tree(
 
 
 def _validate_complex_tree(node: HuffmanNode) -> None:
-    """Validate complex tree: root -> ('a', internal -> ('b', 'c'))."""
     # Root should be internal node
     assert node.character is None
     assert not node.is_leaf
@@ -62,18 +57,14 @@ def _validate_complex_tree(node: HuffmanNode) -> None:
 
 
 def _validate_single_a(node: HuffmanNode) -> None:
-    """Validate single leaf node with character 'a'."""
     _validate_single_leaf(node, "a")
 
 
 def _validate_binary_ab(node: HuffmanNode) -> None:
-    """Validate binary tree with 'a' and 'b'."""
     _validate_binary_tree(node, "a", "b")
 
 
 class TestTreeDeserializer:
-    """Test cases for tree deserialization algorithm."""
-
     @pytest.mark.parametrize(
         "serialized_tree, validator",
         [
@@ -86,6 +77,5 @@ class TestTreeDeserializer:
     def test_deserializes_tree(
         self, serialized_tree: str, validator: Callable[[HuffmanNode], None]
     ) -> None:
-        """Test tree deserialization for various scenarios."""
         result = deserialize_tree(serialized_tree)
         validator(result)
