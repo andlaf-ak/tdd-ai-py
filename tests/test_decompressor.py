@@ -57,9 +57,10 @@ class TestDecompressor:
         data_bytes = _create_test_data(length, tree_bits, data_bits)
 
         data_stream = BytesIO(data_bytes)
+        output_stream = BytesIO()
         decompressor = Decompressor()
 
-        decompressor.decompress(data_stream)
+        decompressor.decompress(data_stream, output_stream)
 
         # Verify length reading
         assert decompressor.get_length() == length
@@ -70,7 +71,7 @@ class TestDecompressor:
         if tree.is_leaf:
             assert tree.character == expected_char
             # Test the new decode functionality
-            decoded_data = decompressor.get_decoded_data()
+            decoded_data = output_stream.getvalue()
             assert decoded_data == expected_decoded
         else:
             assert tree.character == expected_char

@@ -1,6 +1,6 @@
 import struct
 from io import BytesIO
-from typing import Optional, cast
+from typing import BinaryIO, Optional, cast
 
 from .bit_reader import BitReader
 from .data_decoder import decode_data
@@ -12,15 +12,16 @@ class Decompressor:
     def __init__(self) -> None:
         self._length: Optional[int] = None
         self._tree: Optional[HuffmanNode] = None
-        self._decoded_data: Optional[bytes] = None
 
-    def decompress(self, data_stream: BytesIO) -> None:
-        self._length = self._read_big_endian_int(data_stream)
+    def decompress(
+        self, input_stream: BytesIO, output_stream: BinaryIO
+    ) -> None:
+        self._length = self._read_big_endian_int(input_stream)
 
-        bit_reader = BitReader(data_stream)
+        bit_reader = BitReader(input_stream)
         self._tree = deserialize_tree(bit_reader)
 
-        self._decoded_data = decode_data(self._tree, bit_reader, self._length)
+        decode_data(self._tree, bit_reader, self._length, output_stream)
 
     def get_length(self) -> int:
         assert self._length is not None
@@ -29,10 +30,6 @@ class Decompressor:
     def get_tree(self) -> HuffmanNode:
         assert self._tree is not None
         return self._tree
-
-    def get_decoded_data(self) -> bytes:
-        assert self._decoded_data is not None
-        return self._decoded_data
 
     def _read_big_endian_int(self, stream: BytesIO) -> int:
         bytes_data: bytes = stream.read(4)

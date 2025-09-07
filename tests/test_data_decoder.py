@@ -56,5 +56,7 @@ class TestDataDecoder:
         tree = tree_builder()
         _, data_bytes = bits_and_bytes(data_bits)
         bit_reader = BitReader(BytesIO(data_bytes))
-        result = decode_data(tree, bit_reader, length)
+        output_stream = BytesIO()
+        decode_data(tree, bit_reader, length, output_stream)
+        result = output_stream.getvalue()
         assert result == expected

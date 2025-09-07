@@ -1,36 +1,49 @@
+from typing import BinaryIO
+
 from .bit_reader import BitReader
 from .huffman_tree_builder import HuffmanNode
 
 
-def decode_data(root: HuffmanNode, bit_reader: BitReader, length: int) -> bytes:
+def decode_data(
+    root: HuffmanNode,
+    bit_reader: BitReader,
+    length: int,
+    output_stream: BinaryIO,
+) -> None:
     if root.is_leaf:
-        return _decode_single_character_data(root, length)
+        _decode_single_character_data(root, length, output_stream)
+    else:
+        _decode_multi_character_data(root, bit_reader, length, output_stream)
 
-    return _decode_multi_character_data(root, bit_reader, length)
 
-
-def _decode_single_character_data(root: HuffmanNode, length: int) -> bytes:
+def _decode_single_character_data(
+    root: HuffmanNode, length: int, output_stream: BinaryIO
+) -> None:
     _validate_leaf_has_character(root)
     assert root.character is not None  # After validation, we know it's not None
-    return bytes([root.character] * length)
+    data = bytes([root.character] * length)
+    output_stream.write(data)
 
 
 def _decode_multi_character_data(
-    root: HuffmanNode, bit_reader: BitReader, length: int
-) -> bytes:
-    decoder = _CompressedDataDecoder(root, length)
-    return decoder.decode(bit_reader)
+    root: HuffmanNode,
+    bit_reader: BitReader,
+    length: int,
+    output_stream: BinaryIO,
+) -> None:
+    decoder = _CompressedDataDecoder(root, length, output_stream)
+    decoder.decode(bit_reader)
 
 
 class _CompressedDataDecoder:
-    def __init__(self, root: HuffmanNode, length: int):
+    def __init__(self, root: HuffmanNode, length: int, output_stream: BinaryIO):
         self._root = root
         self._length = length
         self._current_node = root
-        self._result: list[int] = []
+        self._output_stream = output_stream
         self._characters_decoded = 0
 
-    def decode(self, bit_reader: BitReader) -> bytes:
+    def decode(self, bit_reader: BitReader) -> None:
         while not self._should_stop_decoding():
             try:
                 bit = bit_reader.read_bit()
@@ -38,7 +51,6 @@ class _CompressedDataDecoder:
             except (IndexError, EOFError):
                 # End of stream reached
                 break
-        return bytes(self._result)
 
     def _should_stop_decoding(self) -> bool:
         return self._characters_decoded == self._length
@@ -54,7 +66,7 @@ class _CompressedDataDecoder:
         assert (
             self._current_node.character is not None
         )  # After validation, we know it's not None
-        self._result.append(self._current_node.character)
+        self._output_stream.write(bytes([self._current_node.character]))
         self._characters_decoded += 1
 
     def _reset_to_root(self) -> None:

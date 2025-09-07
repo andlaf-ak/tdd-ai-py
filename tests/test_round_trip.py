@@ -62,9 +62,10 @@ consequuntur magni dolores eos qui ratione voluptate sequi nesciunt.""",
 
         # Decompress the data
         compressed_input = BytesIO(compressed_data)
+        decompressed_stream = BytesIO()
         decompressor = Decompressor()
-        decompressor.decompress(compressed_input)
-        decompressed_bytes = decompressor.get_decoded_data()
+        decompressor.decompress(compressed_input, decompressed_stream)
+        decompressed_bytes = decompressed_stream.getvalue()
 
         # Verify round-trip integrity
         assert decompressed_bytes == original_bytes
