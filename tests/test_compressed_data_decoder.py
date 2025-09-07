@@ -31,3 +31,26 @@ class TestCompressedDataDecoder:
 
         expected = "abbaaabb"
         assert result == expected
+
+    def test_decodes_complex_tree_with_nested_internal_node(self) -> None:
+        """Test decoding bits 101110110010 with complex tree -> bcbcaab."""
+        # Tree structure:
+        #       root (internal)
+        #      /              \
+        #   'a' (leaf)    internal node
+        #                    /        \
+        #                'b' (leaf)  'c' (leaf)
+        # Codes: a=0, b=10, c=11
+        left_a = HuffmanNode(weight=1, character="a")
+        right_internal_left_b = HuffmanNode(weight=1, character="b")
+        right_internal_right_c = HuffmanNode(weight=1, character="c")
+        right_internal = HuffmanNode(
+            weight=2, left=right_internal_left_b, right=right_internal_right_c
+        )
+        root = HuffmanNode(weight=3, left=left_a, right=right_internal)
+        bits = "101110110010"
+
+        result = decode_compressed_data(root, bits)
+
+        expected = "bcbcaab"
+        assert result == expected
