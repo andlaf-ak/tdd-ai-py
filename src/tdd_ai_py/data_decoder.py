@@ -1,7 +1,7 @@
 from .huffman_tree_builder import HuffmanNode
 
 
-def decode_compressed_data(root: HuffmanNode, bits: str, length: int) -> str:
+def decode_data(root: HuffmanNode, bits: str, length: int) -> str:
     if root.is_leaf:
         return _decode_single_character_data(root, length)
 

@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from tdd_ai_py.compressed_data_decoder import decode_compressed_data
+from tdd_ai_py.data_decoder import decode_data
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 
 
@@ -31,9 +31,7 @@ def _create_three_character_tree() -> HuffmanNode:
     return HuffmanNode(weight=3, left=left_a, right=right_internal)
 
 
-class TestCompressedDataDecoder:
-    """Test cases for compressed data decoder algorithm."""
-
+class TestDataDecoder:
     @pytest.mark.parametrize(
         "tree_builder, bits, length, expected",
         [
@@ -49,14 +47,13 @@ class TestCompressedDataDecoder:
             "with_length_limit",
         ],
     )
-    def test_decodes_compressed_data(
+    def test_decodes_data(
         self,
         tree_builder: Callable[[], HuffmanNode],
         bits: str,
         length: int,
         expected: str,
     ) -> None:
-        """Test compressed data decoding for various scenarios."""
         tree = tree_builder()
-        result = decode_compressed_data(tree, bits, length)
+        result = decode_data(tree, bits, length)
         assert result == expected
