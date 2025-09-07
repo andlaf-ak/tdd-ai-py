@@ -41,7 +41,7 @@ class _CompressedDataDecoder:
         return self._result
 
     def _should_stop_decoding(self) -> bool:
-        return self._characters_decoded >= self._length
+        return self._characters_decoded == self._length
 
     def _process_bit(self, bit: int) -> None:
         self._current_node = _traverse_tree(self._current_node, bit)
