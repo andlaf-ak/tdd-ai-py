@@ -1,6 +1,6 @@
 import struct
 from io import BytesIO
-from typing import List, Optional, cast
+from typing import Optional, cast
 
 from .bit_reader import BitReader
 from .huffman_tree_builder import HuffmanNode
@@ -16,8 +16,7 @@ class Decompressor:
         self._length = self._read_big_endian_int(data_stream)
 
         bit_reader = BitReader(data_stream)
-        tree_bits = self._read_tree_bits(bit_reader)
-        self._tree = deserialize_tree(tree_bits)
+        self._tree = deserialize_tree(bit_reader)
 
     def get_length(self) -> int:
         assert self._length is not None
@@ -30,11 +29,3 @@ class Decompressor:
     def _read_big_endian_int(self, stream: BytesIO) -> int:
         bytes_data: bytes = stream.read(4)
         return cast(int, struct.unpack(">I", bytes_data)[0])
-
-    def _read_tree_bits(self, bit_reader: BitReader) -> List[int]:
-        bits = []
-        # Read 9 bits for single character tree: [1] + 8-bit ASCII
-        for _ in range(9):
-            bit = bit_reader.read_bit()
-            bits.append(bit)
-        return bits

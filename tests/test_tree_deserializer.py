@@ -1,11 +1,31 @@
+from io import BytesIO
 from typing import Callable, List
 
 import pytest
 
+from tdd_ai_py.bit_reader import BitReader
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 from tdd_ai_py.tree_deserializer import deserialize_tree
 
 from .test_helpers import bits
+
+
+def _bits_to_byte_stream(bit_list: List[int]) -> BytesIO:
+    """Convert list of bits to BytesIO stream, padding to byte boundary."""
+    # Pad to byte boundary
+    padded_bits = bit_list[:]
+    while len(padded_bits) % 8 != 0:
+        padded_bits.append(0)
+
+    # Convert to bytes
+    byte_values: List[int] = []
+    for i in range(0, len(padded_bits), 8):
+        byte = 0
+        for j in range(8):
+            byte = (byte << 1) | padded_bits[i + j]
+        byte_values.append(byte)
+
+    return BytesIO(bytes(byte_values))
 
 
 def _validate_single_leaf(node: HuffmanNode, expected_char: str) -> None:
@@ -96,5 +116,7 @@ class TestTreeDeserializer:
         serialized_tree: List[int],
         validator: Callable[[HuffmanNode], None],
     ) -> None:
-        result = deserialize_tree(serialized_tree)
+        byte_stream = _bits_to_byte_stream(serialized_tree)
+        bit_reader = BitReader(byte_stream)
+        result = deserialize_tree(bit_reader)
         validator(result)

@@ -1,41 +1,20 @@
-from typing import List
-
+from .bit_reader import BitReader
 from .huffman_tree_builder import HuffmanNode
 
 
-def deserialize_tree(serialized_tree: List[int]) -> HuffmanNode:
-    result, _ = _deserialize_tree_recursive(serialized_tree, 0)
-    return result
+def deserialize_tree(bit_reader: BitReader) -> HuffmanNode:
+    node_type_bit = bit_reader.read_bit()
 
+    if node_type_bit == 1:
+        # Leaf node: read 8-bit ASCII
+        ascii_value = 0
+        for _ in range(8):
+            bit = bit_reader.read_bit()
+            ascii_value = (ascii_value << 1) | bit
+        character = chr(ascii_value)
+        return HuffmanNode(weight=0, character=character)
 
-def _deserialize_tree_recursive(
-    serialized_tree: List[int], index: int
-) -> tuple[HuffmanNode, int]:
-    if serialized_tree[index] == 1:
-        return _parse_leaf_node(serialized_tree, index)
-    return _parse_internal_node(serialized_tree, index)
-
-
-def _parse_leaf_node(
-    serialized_tree: List[int], index: int
-) -> tuple[HuffmanNode, int]:
-    ascii_bits = serialized_tree[index + 1 : index + 9]
-    ascii_value = 0
-    for bit in ascii_bits:
-        ascii_value = (ascii_value << 1) | bit
-    character = chr(ascii_value)
-    node = HuffmanNode(weight=0, character=character)
-    return node, index + 9
-
-
-def _parse_internal_node(
-    serialized_tree: List[int], index: int
-) -> tuple[HuffmanNode, int]:
-    left_node, next_index = _deserialize_tree_recursive(
-        serialized_tree, index + 1
-    )
-    right_node, final_index = _deserialize_tree_recursive(
-        serialized_tree, next_index
-    )
-    node = HuffmanNode(weight=0, left=left_node, right=right_node)
-    return node, final_index
+    # Internal node: recursively read left and right subtrees
+    left_node = deserialize_tree(bit_reader)
+    right_node = deserialize_tree(bit_reader)
+    return HuffmanNode(weight=0, left=left_node, right=right_node)
