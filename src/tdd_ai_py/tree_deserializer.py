@@ -6,13 +6,12 @@ def deserialize_tree(bit_reader: BitReader) -> HuffmanNode:
     node_type_bit = bit_reader.read_bit()
 
     if node_type_bit == 1:
-        # Leaf node: read 8-bit ASCII
-        ascii_value = 0
+        # Leaf node: read 8-bit value
+        byte_value = 0
         for _ in range(8):
             bit = bit_reader.read_bit()
-            ascii_value = (ascii_value << 1) | bit
-        character = chr(ascii_value)
-        return HuffmanNode(weight=0, character=character)
+            byte_value = (byte_value << 1) | bit
+        return HuffmanNode(weight=0, character=byte_value)
 
     # Internal node: recursively read left and right subtrees
     left_node = deserialize_tree(bit_reader)

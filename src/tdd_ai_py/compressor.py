@@ -1,14 +1,15 @@
-from typing import BinaryIO, TextIO
+from typing import BinaryIO
 
 from .bit_writer import BitWriter
 from .frequency_counter import create_frequency_map
 from .huffman_encoder import generate_huffman_codes
 from .huffman_tree_builder import build_huffman_tree
+from .stream_utils import iter_bytes
 from .tree_serializer import serialize_tree
 
 
 class HuffmanCompressor:
-    def compress(self, input_stream: TextIO, output_stream: BinaryIO) -> None:
+    def compress(self, input_stream: BinaryIO, output_stream: BinaryIO) -> None:
         # First pass: build frequency map by reading from stream
         frequency_map = create_frequency_map(input_stream)
         length = sum(frequency_map.values())
@@ -27,11 +28,8 @@ class HuffmanCompressor:
 
         # Second pass: seek back to start and encode the input
         input_stream.seek(0)
-        while True:
-            char = input_stream.read(1)
-            if not char:
-                break
-            code = codes[char]
+        for byte_value in iter_bytes(input_stream):
+            code = codes[byte_value]
             for bit in code:
                 bit_writer.write_bit(bit)
 

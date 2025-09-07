@@ -18,6 +18,8 @@ class BitReader:
 
     def _load_next_byte(self) -> None:
         byte_data = self._input_stream.read(1)
+        if not byte_data:
+            raise EOFError("No more data available")
         self._buffer = byte_data[0]
         self._bits_in_buffer = 8
 

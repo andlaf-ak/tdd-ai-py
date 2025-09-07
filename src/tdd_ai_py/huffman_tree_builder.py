@@ -21,7 +21,7 @@ class HuffmanNode:
     def __init__(
         self,
         weight: int,
-        character: str | None = None,
+        character: int | None = None,
         left: "HuffmanNode | None" = None,
         right: "HuffmanNode | None" = None,
     ):
@@ -48,7 +48,7 @@ class HuffmanNode:
         )
 
 
-def create_leaf_node(character: str, weight: int) -> HuffmanNode:
+def create_leaf_node(character: int, weight: int) -> HuffmanNode:
     return HuffmanNode(weight=weight, character=character)
 
 
@@ -58,7 +58,7 @@ def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
     )
 
 
-def build_huffman_tree(frequency_map: Dict[str, int]) -> HuffmanNode:
+def build_huffman_tree(frequency_map: Dict[int, int]) -> HuffmanNode:
     # Create initial leaf nodes and build a min-heap
     heap = [
         create_leaf_node(char, freq) for char, freq in frequency_map.items()

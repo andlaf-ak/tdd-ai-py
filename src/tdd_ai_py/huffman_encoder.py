@@ -3,11 +3,11 @@ from typing import Dict, List
 from .huffman_tree_builder import HuffmanNode
 
 
-def generate_huffman_codes(root: HuffmanNode) -> Dict[str, List[int]]:
+def generate_huffman_codes(root: HuffmanNode) -> Dict[int, List[int]]:
     if root.character is not None:
         return {root.character: [0]}
 
-    codes: Dict[str, List[int]] = {}
+    codes: Dict[int, List[int]] = {}
 
     def traverse(node: HuffmanNode, code: List[int]) -> None:
         if node.character is not None:

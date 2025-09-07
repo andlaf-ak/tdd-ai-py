@@ -6,7 +6,7 @@ from .test_helpers import bits_and_bytes
 
 class TestTreeSerializer:
     def test_serializes_single_leaf_node(self) -> None:
-        leaf_node = HuffmanNode(weight=1, character="a")
+        leaf_node = HuffmanNode(weight=1, character=ord("a"))
 
         result = serialize_tree(leaf_node)
 
@@ -15,8 +15,8 @@ class TestTreeSerializer:
         assert result == expected_bits
 
     def test_serializes_tree_with_two_leaf_nodes(self) -> None:
-        left_leaf = HuffmanNode(weight=1, character="a")
-        right_leaf = HuffmanNode(weight=1, character="b")
+        left_leaf = HuffmanNode(weight=1, character=ord("a"))
+        right_leaf = HuffmanNode(weight=1, character=ord("b"))
         root = HuffmanNode(weight=2, left=left_leaf, right=right_leaf)
 
         result = serialize_tree(root)
@@ -35,9 +35,9 @@ class TestTreeSerializer:
         #                    /        \
         #                'b' (leaf)  'c' (leaf)
 
-        left_leaf_a = HuffmanNode(weight=1, character="a")
-        right_internal_left_b = HuffmanNode(weight=1, character="b")
-        right_internal_right_c = HuffmanNode(weight=1, character="c")
+        left_leaf_a = HuffmanNode(weight=1, character=ord("a"))
+        right_internal_left_b = HuffmanNode(weight=1, character=ord("b"))
+        right_internal_right_c = HuffmanNode(weight=1, character=ord("c"))
         right_internal = HuffmanNode(
             weight=2, left=right_internal_left_b, right=right_internal_right_c
         )

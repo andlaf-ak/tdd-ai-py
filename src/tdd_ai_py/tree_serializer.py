@@ -5,8 +5,8 @@ from .huffman_tree_builder import HuffmanNode
 
 def serialize_tree(root: HuffmanNode) -> List[int]:
     if root.character is not None:
-        # Leaf node: emit [1] + 8-bit ASCII representation
-        ascii_bits = [int(bit) for bit in format(ord(root.character), "08b")]
+        # Leaf node: emit [1] + 8-bit binary representation
+        ascii_bits = [int(bit) for bit in format(root.character, "08b")]
         return [1] + ascii_bits
 
     # Internal node: emit [0] + serialize left and right subtrees

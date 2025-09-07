@@ -1,6 +1,6 @@
 """Tests for the Huffman compressor."""
 
-from io import BytesIO, StringIO
+from io import BytesIO
 
 from tdd_ai_py.compressor import HuffmanCompressor
 
@@ -10,7 +10,7 @@ class TestHuffmanCompressor:
 
     def test_compresses_single_character_to_byte_stream(self) -> None:
         """Test that single character produces: length(4 bytes) + serialized tree + encoded data."""
-        input_stream = StringIO("a")
+        input_stream = BytesIO(b"a")
         output_stream = BytesIO()
         compressor = HuffmanCompressor()
 

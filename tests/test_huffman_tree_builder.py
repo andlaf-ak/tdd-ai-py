@@ -16,7 +16,7 @@ class TestHuffmanNode:
 
     def test_creates_leaf_node(self) -> None:
         """Test creation of a leaf node."""
-        character = "a"
+        character = ord("a")
         weight = 5
 
         node = HuffmanNode(weight=weight, character=character)
@@ -29,8 +29,8 @@ class TestHuffmanNode:
 
     def test_creates_internal_node(self) -> None:
         """Test creation of an internal node."""
-        left_node = HuffmanNode(weight=2, character="b")
-        right_node = HuffmanNode(weight=3, character="c")
+        left_node = HuffmanNode(weight=2, character=ord("b"))
+        right_node = HuffmanNode(weight=3, character=ord("c"))
         weight = 5
 
         node = HuffmanNode(weight=weight, left=left_node, right=right_node)
@@ -43,8 +43,8 @@ class TestHuffmanNode:
 
     def test_node_comparison_for_heap(self) -> None:
         """Test that nodes can be compared by weight for heap operations."""
-        node1 = HuffmanNode(weight=1, character="a")
-        node2 = HuffmanNode(weight=2, character="b")
+        node1 = HuffmanNode(weight=1, character=ord("a"))
+        node2 = HuffmanNode(weight=2, character=ord("b"))
 
         assert node1 < node2
         assert not (node2 < node1)
@@ -52,9 +52,9 @@ class TestHuffmanNode:
 
     def test_node_equality(self) -> None:
         """Test node equality comparison."""
-        node1 = HuffmanNode(weight=1, character="a")
-        node2 = HuffmanNode(weight=1, character="a")
-        node3 = HuffmanNode(weight=2, character="a")
+        node1 = HuffmanNode(weight=1, character=ord("a"))
+        node2 = HuffmanNode(weight=1, character=ord("a"))
+        node3 = HuffmanNode(weight=2, character=ord("a"))
 
         assert node1 == node2
         assert node1 != node3
@@ -66,7 +66,13 @@ class TestBuildHuffmanTree:
 
     def test_builds_complete_huffman_tree(self) -> None:
         """Test that a complete Huffman tree is built from a frequency map."""
-        frequency_map = {"a": 5, "b": 2, "r": 2, "c": 1, "d": 1}
+        frequency_map = {
+            ord("a"): 5,
+            ord("b"): 2,
+            ord("r"): 2,
+            ord("c"): 1,
+            ord("d"): 1,
+        }
 
         result = build_huffman_tree(frequency_map)
 
@@ -80,13 +86,13 @@ class TestBuildHuffmanTree:
 
     def test_builds_single_node_tree(self) -> None:
         """Test building tree with single character."""
-        frequency_map = {"a": 5}
+        frequency_map = {ord("a"): 5}
 
         result = build_huffman_tree(frequency_map)
 
         assert isinstance(result, HuffmanNode)
         assert result.weight == 5
-        assert result.character == "a"
+        assert result.character == ord("a")
         assert result.is_leaf
 
 
@@ -95,7 +101,7 @@ class TestHuffmanTreeBuilderFunctions:
 
     def test_create_leaf_node_function(self) -> None:
         """Test the standalone create_leaf_node function."""
-        character = "x"
+        character = ord("x")
         weight = 10
 
         result = create_leaf_node(character, weight)
@@ -106,8 +112,8 @@ class TestHuffmanTreeBuilderFunctions:
 
     def test_create_internal_node_function(self) -> None:
         """Test the standalone create_internal_node function."""
-        left = create_leaf_node("a", 2)
-        right = create_leaf_node("b", 3)
+        left = create_leaf_node(ord("a"), 2)
+        right = create_leaf_node(ord("b"), 3)
 
         result = create_internal_node(left, right)
 

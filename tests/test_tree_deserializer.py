@@ -28,7 +28,7 @@ def _bits_to_byte_stream(bit_list: List[int]) -> BytesIO:
     return BytesIO(bytes(byte_values))
 
 
-def _validate_single_leaf(node: HuffmanNode, expected_char: str) -> None:
+def _validate_single_leaf(node: HuffmanNode, expected_char: int) -> None:
     assert node.character == expected_char
     assert node.weight == 0
     assert node.left is None
@@ -37,7 +37,7 @@ def _validate_single_leaf(node: HuffmanNode, expected_char: str) -> None:
 
 
 def _validate_binary_tree(
-    node: HuffmanNode, left_char: str, right_char: str
+    node: HuffmanNode, left_char: int, right_char: int
 ) -> None:
     # Root should be internal node
     assert node.character is None
@@ -61,7 +61,7 @@ def _validate_complex_tree(node: HuffmanNode) -> None:
     assert node.right is not None
 
     # Left child should be 'a'
-    assert node.left.character == "a"
+    assert node.left.character == ord("a")
     assert node.left.is_leaf
 
     # Right child should be internal node
@@ -72,18 +72,18 @@ def _validate_complex_tree(node: HuffmanNode) -> None:
     assert right_internal.right is not None
 
     # Right internal's children should be 'b' and 'c'
-    assert right_internal.left.character == "b"
+    assert right_internal.left.character == ord("b")
     assert right_internal.left.is_leaf
-    assert right_internal.right.character == "c"
+    assert right_internal.right.character == ord("c")
     assert right_internal.right.is_leaf
 
 
 def _validate_single_a(node: HuffmanNode) -> None:
-    _validate_single_leaf(node, "a")
+    _validate_single_leaf(node, ord("a"))
 
 
 def _validate_binary_ab(node: HuffmanNode) -> None:
-    _validate_binary_tree(node, "a", "b")
+    _validate_binary_tree(node, ord("a"), ord("b"))
 
 
 class TestTreeDeserializer:

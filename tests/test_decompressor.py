@@ -38,9 +38,9 @@ class TestDecompressor:
         "length, tree_bits, data_bits, expected_char, expected_left_char, expected_decoded",
         [
             # Single character 'a': Tree "101100001" (9 bits) + data "000000" (6 bits for "aaaaaa")
-            (6, "101100001", "000000", "a", None, "aaaaaa"),
+            (6, "101100001", "000000", ord("a"), None, b"aaaaaa"),
             # Two symbols 'a'/'b': Tree "0" + "1" + "01100001" + "1" + "01100010" (19 bits)
-            (12, "0101100001101100010", "000111001101", None, "a", None),
+            (12, "0101100001101100010", "000111001101", None, ord("a"), None),
         ],
         ids=["single_character", "two_symbols"],
     )
@@ -49,9 +49,9 @@ class TestDecompressor:
         length: int,
         tree_bits: str,
         data_bits: str,
-        expected_char: str | None,
-        expected_left_char: str | None,
-        expected_decoded: str | None,
+        expected_char: int | None,
+        expected_left_char: int | None,
+        expected_decoded: bytes | None,
     ) -> None:
         """Test decompression of various tree structures."""
         data_bytes = _create_test_data(length, tree_bits, data_bits)
@@ -70,11 +70,11 @@ class TestDecompressor:
         if tree.is_leaf:
             assert tree.character == expected_char
             # Test the new decode functionality
-            decoded_text = decompressor.get_decoded_text()
-            assert decoded_text == expected_decoded
+            decoded_data = decompressor.get_decoded_data()
+            assert decoded_data == expected_decoded
         else:
             assert tree.character == expected_char
             assert tree.left is not None
             assert tree.right is not None
             assert tree.left.character == expected_left_char
-            assert tree.right.character == "b"
+            assert tree.right.character == ord("b")

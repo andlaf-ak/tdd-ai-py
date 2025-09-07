@@ -11,19 +11,19 @@ from .test_helpers import bits_and_bytes
 
 
 def _create_single_character_tree() -> HuffmanNode:
-    return HuffmanNode(weight=1, character="a")
+    return HuffmanNode(weight=1, character=ord("a"))
 
 
 def _create_two_character_tree() -> HuffmanNode:
-    left_a = HuffmanNode(weight=1, character="a")
-    right_b = HuffmanNode(weight=1, character="b")
+    left_a = HuffmanNode(weight=1, character=ord("a"))
+    right_b = HuffmanNode(weight=1, character=ord("b"))
     return HuffmanNode(weight=2, left=left_a, right=right_b)
 
 
 def _create_three_character_tree() -> HuffmanNode:
-    left_a = HuffmanNode(weight=1, character="a")
-    right_internal_left_b = HuffmanNode(weight=1, character="b")
-    right_internal_right_c = HuffmanNode(weight=1, character="c")
+    left_a = HuffmanNode(weight=1, character=ord("a"))
+    right_internal_left_b = HuffmanNode(weight=1, character=ord("b"))
+    right_internal_right_c = HuffmanNode(weight=1, character=ord("c"))
     right_internal = HuffmanNode(
         weight=2, left=right_internal_left_b, right=right_internal_right_c
     )
@@ -34,10 +34,10 @@ class TestDataDecoder:
     @pytest.mark.parametrize(
         "tree_builder, data_bits, length, expected",
         [
-            (_create_single_character_tree, "0", 1, "a"),
-            (_create_two_character_tree, "01100011", 8, "abbaaabb"),
-            (_create_three_character_tree, "101110110010", 7, "bcbcaab"),
-            (_create_three_character_tree, "101110110010", 7, "bcbcaab"),
+            (_create_single_character_tree, "0", 1, b"a"),
+            (_create_two_character_tree, "01100011", 8, b"abbaaabb"),
+            (_create_three_character_tree, "101110110010", 7, b"bcbcaab"),
+            (_create_three_character_tree, "101110110010", 7, b"bcbcaab"),
         ],
         ids=[
             "single_character",
@@ -51,7 +51,7 @@ class TestDataDecoder:
         tree_builder: Callable[[], HuffmanNode],
         data_bits: str,
         length: int,
-        expected: str,
+        expected: bytes,
     ) -> None:
         tree = tree_builder()
         _, data_bytes = bits_and_bytes(data_bits)

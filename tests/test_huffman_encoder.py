@@ -1,4 +1,4 @@
-from io import StringIO
+from io import BytesIO
 from typing import Dict, List
 
 from tdd_ai_py.frequency_counter import create_frequency_map
@@ -6,7 +6,7 @@ from tdd_ai_py.huffman_encoder import generate_huffman_codes
 from tdd_ai_py.huffman_tree_builder import HuffmanNode, build_huffman_tree
 
 
-def _assert_codes_are_prefix_free(codes: Dict[str, List[int]]) -> None:
+def _assert_codes_are_prefix_free(codes: Dict[int, List[int]]) -> None:
     code_list = list(codes.values())
     for i, code1 in enumerate(code_list):
         for j, code2 in enumerate(code_list):
@@ -20,7 +20,7 @@ def _assert_codes_are_prefix_free(codes: Dict[str, List[int]]) -> None:
 
 
 def _assert_optimal_code_lengths(
-    codes: Dict[str, List[int]], frequencies: Dict[str, int]
+    codes: Dict[int, List[int]], frequencies: Dict[int, int]
 ) -> None:
     for char1 in frequencies:
         for char2 in frequencies:
@@ -40,27 +40,27 @@ def _assert_optimal_code_lengths(
 
 class TestHuffmanEncoder:
     def test_generates_code_for_single_root_node(self) -> None:
-        root_node = HuffmanNode(weight=1, character="a")
+        root_node = HuffmanNode(weight=1, character=ord("a"))
 
         codes = generate_huffman_codes(root_node)
 
-        assert codes == {"a": [0]}
+        assert codes == {ord("a"): [0]}
 
     def test_generates_codes_for_tree_with_two_leaf_nodes(self) -> None:
-        left_node = HuffmanNode(weight=1, character="a")
-        right_node = HuffmanNode(weight=1, character="b")
+        left_node = HuffmanNode(weight=1, character=ord("a"))
+        right_node = HuffmanNode(weight=1, character=ord("b"))
         root_node = HuffmanNode(weight=2, left=left_node, right=right_node)
 
         codes = generate_huffman_codes(root_node)
 
-        assert codes == {"a": [0], "b": [1]}
+        assert codes == {ord("a"): [0], ord("b"): [1]}
 
     def test_huffman_codes_have_prefix_property_and_optimal_lengths(
         self,
     ) -> None:
         text = "she sells seashells on the seashore"
 
-        input_stream = StringIO(text)
+        input_stream = BytesIO(text.encode("utf-8"))
         frequencies = create_frequency_map(input_stream)
         huffman_tree = build_huffman_tree(frequencies)
         codes = generate_huffman_codes(huffman_tree)
