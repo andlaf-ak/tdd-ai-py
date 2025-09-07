@@ -35,30 +35,28 @@ class TestCompressedDataDecoder:
     """Test cases for compressed data decoder algorithm."""
 
     @pytest.mark.parametrize(
-        "tree_builder, bits, expected",
+        "tree_builder, bits, length, expected",
         [
-            (_create_single_character_tree, "0", "01100001"),
-            (_create_two_character_tree, "01100011", "abbaaabb"),
-            (_create_three_character_tree, "101110110010", "bcbcaab"),
+            (_create_single_character_tree, "0", 1, "a"),
+            (_create_two_character_tree, "01100011", 8, "abbaaabb"),
+            (_create_three_character_tree, "101110110010", 7, "bcbcaab"),
+            (_create_three_character_tree, "1011101100100000", 7, "bcbcaab"),
         ],
-        ids=["single_character", "two_characters", "three_characters"],
+        ids=[
+            "single_character",
+            "two_characters",
+            "three_characters",
+            "with_length_limit",
+        ],
     )
     def test_decodes_compressed_data(
-        self, tree_builder: Callable[[], HuffmanNode], bits: str, expected: str
+        self,
+        tree_builder: Callable[[], HuffmanNode],
+        bits: str,
+        length: int,
+        expected: str,
     ) -> None:
-        """Test compressed data decoding for various character scenarios."""
+        """Test compressed data decoding for various scenarios."""
         tree = tree_builder()
-        result = decode_compressed_data(tree, bits)
-        assert result == expected
-
-    def test_decodes_compressed_data_with_length_limit(self) -> None:
-        """Test that decoder stops after decoding specified number of characters."""
-        # Tree: a=0, b=10, c=11
-        tree = _create_three_character_tree()
-        bits = "1011101100100000"  # bcbcaab + padding bits
-        length = 7
-
         result = decode_compressed_data(tree, bits, length)
-
-        expected = "bcbcaab"  # Should stop after 7 characters, ignore padding
         assert result == expected

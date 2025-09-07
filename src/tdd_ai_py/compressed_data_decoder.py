@@ -1,32 +1,28 @@
-from typing import Optional
-
 from .huffman_tree_builder import HuffmanNode
 
 
-def decode_compressed_data(
-    root: HuffmanNode, bits: str, length: Optional[int] = None
-) -> str:
+def decode_compressed_data(root: HuffmanNode, bits: str, length: int) -> str:
     if root.is_leaf:
-        return _decode_single_character_data(root)
+        return _decode_single_character_data(root, length)
 
     return _decode_multi_character_data(root, bits, length)
 
 
-def _decode_single_character_data(root: HuffmanNode) -> str:
+def _decode_single_character_data(root: HuffmanNode, length: int) -> str:
     _validate_leaf_has_character(root)
     assert root.character is not None  # After validation, we know it's not None
-    return _character_to_8bit_ascii(root.character)
+    return root.character * length
 
 
 def _decode_multi_character_data(
-    root: HuffmanNode, bits: str, length: Optional[int]
+    root: HuffmanNode, bits: str, length: int
 ) -> str:
     decoder = _CompressedDataDecoder(root, length)
     return decoder.decode(bits)
 
 
 class _CompressedDataDecoder:
-    def __init__(self, root: HuffmanNode, length: Optional[int]):
+    def __init__(self, root: HuffmanNode, length: int):
         self._root = root
         self._length = length
         self._current_node = root
@@ -41,10 +37,7 @@ class _CompressedDataDecoder:
         return self._result
 
     def _should_stop_decoding(self) -> bool:
-        return (
-            self._length is not None
-            and self._characters_decoded >= self._length
-        )
+        return self._characters_decoded >= self._length
 
     def _process_bit(self, bit: str) -> None:
         self._current_node = _traverse_tree(self._current_node, bit)
