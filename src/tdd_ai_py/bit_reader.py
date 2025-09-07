@@ -7,7 +7,7 @@ class BitReader:
         self._buffer = 0
         self._bits_in_buffer = 0
 
-    def read_bit(self) -> str:
+    def read_bit(self) -> int:
         if self._needs_new_byte():
             self._load_next_byte()
 
@@ -21,8 +21,8 @@ class BitReader:
         self._buffer = ord(char)
         self._bits_in_buffer = 8
 
-    def _extract_next_bit(self) -> str:
+    def _extract_next_bit(self) -> int:
         bit = (self._buffer >> 7) & 1
         self._buffer = (self._buffer << 1) & 0xFF
         self._bits_in_buffer -= 1
-        return str(bit)
+        return bit

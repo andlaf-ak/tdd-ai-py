@@ -16,4 +16,4 @@ class TestBitReader:
         result = bit_reader.read_bit()
 
         # 'a' = ASCII 97 = 01100001 in binary, MSB is 0
-        assert result == "0"
+        assert result == 0
