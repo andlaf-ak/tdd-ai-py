@@ -1,5 +1,7 @@
 """Tests for Huffman code generation from tree paths."""
 
+from io import StringIO
+
 from tdd_ai_py.frequency_counter import create_frequency_map
 from tdd_ai_py.huffman_encoder import generate_huffman_codes
 from tdd_ai_py.huffman_tree_builder import HuffmanNode, build_huffman_tree
@@ -63,7 +65,8 @@ class TestHuffmanEncoder:
         """Test that Huffman codes satisfy prefix property and length optimality."""
         text = "she sells seashells on the seashore"
 
-        frequencies = create_frequency_map(text)
+        input_stream = StringIO(text)
+        frequencies = create_frequency_map(input_stream)
         huffman_tree = build_huffman_tree(frequencies)
         codes = generate_huffman_codes(huffman_tree)
 

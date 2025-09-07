@@ -9,14 +9,14 @@ from .tree_serializer import serialize_tree
 
 class HuffmanCompressor:
     def compress(self, input_stream: TextIO, output_stream: BinaryIO) -> None:
-        text = input_stream.read()
+        # First pass: build frequency map by reading from stream
+        frequency_map = create_frequency_map(input_stream)
+        length = sum(frequency_map.values())
 
-        length = len(text)
-        output_stream.write(length.to_bytes(4, byteorder="big"))
-
-        frequency_map = create_frequency_map(text)
         huffman_tree = build_huffman_tree(frequency_map)
 
+        # Write length and tree serialization
+        output_stream.write(length.to_bytes(4, byteorder="big"))
         serialized_tree = serialize_tree(huffman_tree)
         codes = generate_huffman_codes(huffman_tree)
 
@@ -25,7 +25,12 @@ class HuffmanCompressor:
         for bit_char in serialized_tree:
             bit_writer.write_bit(int(bit_char))
 
-        for char in text:
+        # Second pass: seek back to start and encode the input
+        input_stream.seek(0)
+        while True:
+            char = input_stream.read(1)
+            if not char:
+                break
             code = codes[char]
             for bit_char in code:
                 bit_writer.write_bit(int(bit_char))
