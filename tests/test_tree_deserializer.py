@@ -1,9 +1,11 @@
-from typing import Callable
+from typing import Callable, List
 
 import pytest
 
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 from tdd_ai_py.tree_deserializer import deserialize_tree
+
+from .test_helpers import bits
 
 
 def _validate_single_leaf(node: HuffmanNode, expected_char: str) -> None:
@@ -68,14 +70,31 @@ class TestTreeDeserializer:
     @pytest.mark.parametrize(
         "serialized_tree, validator",
         [
-            ("101100001", _validate_single_a),
-            ("0101100001101100010", _validate_binary_ab),
-            ("01011000010101100010101100011", _validate_complex_tree),
+            (bits("1" + "01100001"), _validate_single_a),
+            (
+                bits("0" + "1" + "01100001" + "1" + "01100010"),
+                _validate_binary_ab,
+            ),
+            (
+                bits(
+                    "0"
+                    + "1"
+                    + "01100001"
+                    + "0"
+                    + "1"
+                    + "01100010"
+                    + "1"
+                    + "01100011"
+                ),
+                _validate_complex_tree,
+            ),
         ],
         ids=["single_leaf", "binary_tree", "complex_tree"],
     )
     def test_deserializes_tree(
-        self, serialized_tree: str, validator: Callable[[HuffmanNode], None]
+        self,
+        serialized_tree: List[int],
+        validator: Callable[[HuffmanNode], None],
     ) -> None:
         result = deserialize_tree(serialized_tree)
         validator(result)

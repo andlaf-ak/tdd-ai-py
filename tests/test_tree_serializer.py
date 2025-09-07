@@ -1,6 +1,8 @@
 from tdd_ai_py.huffman_tree_builder import HuffmanNode
 from tdd_ai_py.tree_serializer import serialize_tree
 
+from .test_helpers import bits
+
 
 class TestTreeSerializer:
     def test_serializes_single_leaf_node(self) -> None:
@@ -9,7 +11,7 @@ class TestTreeSerializer:
         result = serialize_tree(leaf_node)
 
         # 'a' = ASCII 97 = 01100001 in binary
-        assert result == "101100001"
+        assert result == bits("101100001")
 
     def test_serializes_tree_with_two_leaf_nodes(self) -> None:
         left_leaf = HuffmanNode(weight=1, character="a")
@@ -21,7 +23,7 @@ class TestTreeSerializer:
         # Depth-first: root(internal)=0, left(leaf)=1+8bits_a, right(leaf)=1+8bits_b
         # 'a' = ASCII 97 = 01100001, 'b' = ASCII 98 = 01100010
         expected = "0" + "1" + "01100001" + "1" + "01100010"
-        assert result == expected
+        assert result == bits(expected)
 
     def test_serializes_complex_tree_with_nested_internal_node(self) -> None:
         # Build tree structure:
@@ -51,4 +53,4 @@ class TestTreeSerializer:
         expected = (
             "0" + "1" + "01100001" + "0" + "1" + "01100010" + "1" + "01100011"
         )
-        assert result == expected
+        assert result == bits(expected)

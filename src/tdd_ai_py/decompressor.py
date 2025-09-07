@@ -1,6 +1,6 @@
 import struct
 from io import BytesIO
-from typing import Optional, cast
+from typing import List, Optional, cast
 
 from .bit_reader import BitReader
 from .huffman_tree_builder import HuffmanNode
@@ -31,10 +31,10 @@ class Decompressor:
         bytes_data: bytes = stream.read(4)
         return cast(int, struct.unpack(">I", bytes_data)[0])
 
-    def _read_tree_bits(self, bit_reader: BitReader) -> str:
-        bits = ""
-        # Read 9 bits for single character tree: "1" + 8-bit ASCII
+    def _read_tree_bits(self, bit_reader: BitReader) -> List[int]:
+        bits = []
+        # Read 9 bits for single character tree: [1] + 8-bit ASCII
         for _ in range(9):
             bit = bit_reader.read_bit()
-            bits += str(bit)
+            bits.append(bit)
         return bits

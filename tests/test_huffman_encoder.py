@@ -1,27 +1,27 @@
-"""Tests for Huffman code generation from tree paths."""
-
 from io import StringIO
+from typing import Dict, List
 
 from tdd_ai_py.frequency_counter import create_frequency_map
 from tdd_ai_py.huffman_encoder import generate_huffman_codes
 from tdd_ai_py.huffman_tree_builder import HuffmanNode, build_huffman_tree
 
 
-def _assert_codes_are_prefix_free(codes: dict[str, str]) -> None:
-    """Assert that no code is a prefix of another code."""
+def _assert_codes_are_prefix_free(codes: Dict[str, List[int]]) -> None:
     code_list = list(codes.values())
     for i, code1 in enumerate(code_list):
         for j, code2 in enumerate(code_list):
             if i != j:
-                assert not code2.startswith(
-                    code1
-                ), f"Code '{code1}' is prefix of '{code2}'"
+                # Check if code1 is prefix of code2
+                if len(code1) <= len(code2):
+                    is_prefix = code2[: len(code1)] == code1
+                    assert (
+                        not is_prefix
+                    ), f"Code '{code1}' is prefix of '{code2}'"
 
 
 def _assert_optimal_code_lengths(
-    codes: dict[str, str], frequencies: dict[str, int]
+    codes: Dict[str, List[int]], frequencies: Dict[str, int]
 ) -> None:
-    """Assert that more frequent characters don't have longer codes than less frequent ones."""
     for char1 in frequencies:
         for char2 in frequencies:
             if (
@@ -39,30 +39,25 @@ def _assert_optimal_code_lengths(
 
 
 class TestHuffmanEncoder:
-    """Test cases for generating Huffman codes from tree paths."""
-
     def test_generates_code_for_single_root_node(self) -> None:
-        """Test that single root node generates code '0'."""
         root_node = HuffmanNode(weight=1, character="a")
 
         codes = generate_huffman_codes(root_node)
 
-        assert codes == {"a": "0"}
+        assert codes == {"a": [0]}
 
     def test_generates_codes_for_tree_with_two_leaf_nodes(self) -> None:
-        """Test that tree with two leaves generates '0' for left, '1' for right."""
         left_node = HuffmanNode(weight=1, character="a")
         right_node = HuffmanNode(weight=1, character="b")
         root_node = HuffmanNode(weight=2, left=left_node, right=right_node)
 
         codes = generate_huffman_codes(root_node)
 
-        assert codes == {"a": "0", "b": "1"}
+        assert codes == {"a": [0], "b": [1]}
 
     def test_huffman_codes_have_prefix_property_and_optimal_lengths(
         self,
     ) -> None:
-        """Test that Huffman codes satisfy prefix property and length optimality."""
         text = "she sells seashells on the seashore"
 
         input_stream = StringIO(text)

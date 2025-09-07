@@ -1,7 +1,9 @@
+from typing import List
+
 from .huffman_tree_builder import HuffmanNode
 
 
-def decode_data(root: HuffmanNode, bits: str, length: int) -> str:
+def decode_data(root: HuffmanNode, bits: List[int], length: int) -> str:
     if root.is_leaf:
         return _decode_single_character_data(root, length)
 
@@ -15,7 +17,7 @@ def _decode_single_character_data(root: HuffmanNode, length: int) -> str:
 
 
 def _decode_multi_character_data(
-    root: HuffmanNode, bits: str, length: int
+    root: HuffmanNode, bits: List[int], length: int
 ) -> str:
     decoder = _CompressedDataDecoder(root, length)
     return decoder.decode(bits)
@@ -29,7 +31,7 @@ class _CompressedDataDecoder:
         self._result = ""
         self._characters_decoded = 0
 
-    def decode(self, bits: str) -> str:
+    def decode(self, bits: List[int]) -> str:
         for bit in bits:
             if self._should_stop_decoding():
                 break
@@ -39,7 +41,7 @@ class _CompressedDataDecoder:
     def _should_stop_decoding(self) -> bool:
         return self._characters_decoded >= self._length
 
-    def _process_bit(self, bit: str) -> None:
+    def _process_bit(self, bit: int) -> None:
         self._current_node = _traverse_tree(self._current_node, bit)
         if self._current_node.is_leaf:
             self._add_decoded_character()
@@ -62,8 +64,8 @@ def _validate_leaf_has_character(node: HuffmanNode) -> None:
         raise ValueError("Leaf node must have a character")
 
 
-def _traverse_tree(node: HuffmanNode, bit: str) -> HuffmanNode:
-    if bit == "0":
+def _traverse_tree(node: HuffmanNode, bit: int) -> HuffmanNode:
+    if bit == 0:
         if node.left is None:
             raise ValueError("Invalid tree structure: missing left child")
         return node.left

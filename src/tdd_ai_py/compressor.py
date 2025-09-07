@@ -22,8 +22,8 @@ class HuffmanCompressor:
 
         bit_writer = BitWriter(output_stream)
 
-        for bit_char in serialized_tree:
-            bit_writer.write_bit(int(bit_char))
+        for bit in serialized_tree:
+            bit_writer.write_bit(bit)
 
         # Second pass: seek back to start and encode the input
         input_stream.seek(0)
@@ -32,7 +32,7 @@ class HuffmanCompressor:
             if not char:
                 break
             code = codes[char]
-            for bit_char in code:
-                bit_writer.write_bit(int(bit_char))
+            for bit in code:
+                bit_writer.write_bit(bit)
 
         bit_writer.flush()
