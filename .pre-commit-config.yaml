@@ -35,19 +35,17 @@ repos:
       # Format first, then lint
       - id: black-format
         name: black (format)
-        entry: poetry run black
+        entry: bash -c 'poetry run black src/ tests/ && git add -u'
         language: system
         types: [python]
-        args: [src/, tests/]
         pass_filenames: false
         stages: [commit]
 
       - id: isort-format
         name: isort (format)
-        entry: poetry run isort
+        entry: bash -c 'poetry run isort src/ tests/ && git add -u'
         language: system
         types: [python]
-        args: [src/, tests/]
         pass_filenames: false
         stages: [commit]
 

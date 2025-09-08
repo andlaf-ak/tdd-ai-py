@@ -5,13 +5,15 @@ T = TypeVar("T")
 
 
 def find_two_lowest_items(items: List[T], key_func: Callable[[T], int]) -> Tuple[T, T]:
+    """Find the two items with lowest key values using heap operations for O(n)."""
     if not items:
         raise ValueError("At least one item is required")
-    return (
-        (items[0], items[0])
-        if len(items) == 1
-        else (sorted(items, key=key_func)[0], sorted(items, key=key_func)[1])
-    )
+    if len(items) == 1:
+        return (items[0], items[0])
+
+    # Use heapq.nsmallest for O(n) complexity instead of sorting
+    two_smallest = heapq.nsmallest(2, items, key=key_func)
+    return (two_smallest[0], two_smallest[1])
 
 
 class HuffmanNode:
@@ -54,17 +56,16 @@ def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
 
 
 def build_huffman_tree(frequency_map: Dict[int, int]) -> HuffmanNode:
-    def build_tree_recursive(nodes: List[HuffmanNode]) -> HuffmanNode:
-        return (
-            nodes[0]
-            if len(nodes) == 1
-            else build_tree_recursive(
-                [
-                    create_internal_node(*heapq.nsmallest(2, nodes)),
-                    *[node for node in nodes if node not in heapq.nsmallest(2, nodes)],
-                ]
-            )
-        )
+    """Build Huffman tree using iterative heap-based approach to avoid recursion."""
+    # Create initial heap of leaf nodes
+    heap = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
+    heapq.heapify(heap)
 
-    initial_nodes = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
-    return build_tree_recursive(initial_nodes)
+    # Iteratively build tree using heap operations (no recursion)
+    while len(heap) > 1:
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
+        merged = create_internal_node(left, right)
+        heapq.heappush(heap, merged)
+
+    return heap[0]
