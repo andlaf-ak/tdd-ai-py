@@ -5,14 +5,9 @@ T = TypeVar("T")
 
 
 def find_two_lowest_items(items: List[T], key_func: Callable[[T], int]) -> Tuple[T, T]:
-    if len(items) == 0:
+    if not items:
         raise ValueError("At least one item is required")
-
-    if len(items) == 1:
-        return items[0], items[0]
-
-    sorted_items = sorted(items, key=key_func)
-    return sorted_items[0], sorted_items[1]
+    return (items[0], items[0]) if len(items) == 1 else (sorted(items, key=key_func)[0], sorted(items, key=key_func)[1])
 
 
 class HuffmanNode:
@@ -55,19 +50,17 @@ def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
 
 
 def build_huffman_tree(frequency_map: Dict[int, int]) -> HuffmanNode:
-    # Create initial leaf nodes and build a min-heap
-    heap = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
-    heapq.heapify(heap)
+    def build_tree_recursive(nodes: List[HuffmanNode]) -> HuffmanNode:
+        return (
+            nodes[0]
+            if len(nodes) == 1
+            else build_tree_recursive(
+                [
+                    create_internal_node(*heapq.nsmallest(2, nodes)),
+                    *[node for node in nodes if node not in heapq.nsmallest(2, nodes)],
+                ]
+            )
+        )
 
-    # Keep combining nodes until only one remains
-    while len(heap) > 1:
-        # Pop the two nodes with lowest weights (O(log n) each)
-        left_node = heapq.heappop(heap)
-        right_node = heapq.heappop(heap)
-
-        # Create new internal node and push it back (O(log n))
-        combined_node = create_internal_node(left_node, right_node)
-        heapq.heappush(heap, combined_node)
-
-    # Return the root node
-    return heap[0]
+    initial_nodes = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
+    return build_tree_recursive(initial_nodes)
