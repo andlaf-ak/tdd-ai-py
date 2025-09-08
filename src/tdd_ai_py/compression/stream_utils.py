@@ -1,13 +1,13 @@
 from typing import BinaryIO, Iterator
 
 
-def iter_bytes(input_stream: BinaryIO) -> Iterator[int]:
-    """Iterate over bytes from a binary stream.
+def iter_bytes(input_stream: BinaryIO, buffer_size: int = 8192) -> Iterator[int]:
+    """Iterate over bytes from a binary stream using buffered reads.
 
     Yields each byte value as an integer.
     """
     while True:
-        byte_data = input_stream.read(1)
-        if not byte_data:
+        buffer = input_stream.read(buffer_size)
+        if not buffer:
             break
-        yield byte_data[0]
+        yield from buffer

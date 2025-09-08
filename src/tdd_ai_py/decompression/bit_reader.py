@@ -1,15 +1,15 @@
 from typing import BinaryIO, Iterator
 
 
-def bits_from_stream(input_stream: BinaryIO) -> Iterator[int]:
-    """Generate bits from a byte stream."""
+def bits_from_stream(input_stream: BinaryIO, buffer_size: int = 8192) -> Iterator[int]:
+    """Generate bits from a byte stream using buffered reads for efficiency."""
     while True:
-        byte_data = input_stream.read(1)
-        if not byte_data:
+        buffer = input_stream.read(buffer_size)
+        if not buffer:
             return
-        byte_value = byte_data[0]
-        for i in range(8):
-            yield (byte_value >> (7 - i)) & 1
+        for byte_value in buffer:
+            for i in range(8):
+                yield (byte_value >> (7 - i)) & 1
 
 
 class BitReader:

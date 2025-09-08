@@ -1,4 +1,4 @@
-from itertools import islice
+from itertools import chain, islice, repeat
 from typing import BinaryIO, Iterator, List
 
 
@@ -14,7 +14,8 @@ def chunk_bits(bits: Iterator[int], size: int = 8) -> Iterator[List[int]]:
 
 def bits_to_byte(bit_chunk: List[int]) -> int:
     """Convert a list of bits to a single byte value."""
-    padded_bits = bit_chunk + [0] * (8 - len(bit_chunk))
+    # Use functional approach with itertools.chain to avoid list concatenation
+    padded_bits = chain(bit_chunk, repeat(0, 8 - len(bit_chunk)))
     return sum(bit << (7 - i) for i, bit in enumerate(padded_bits))
 
 
@@ -32,6 +33,8 @@ class BitWriter:
         self._bits.append(bit & 1)
 
     def flush(self) -> None:
+        if not self._bits:
+            return
         byte_data = bytes(bits_to_bytes(iter(self._bits)))
         self._output_stream.write(byte_data)
         self._bits.clear()
