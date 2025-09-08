@@ -191,6 +191,14 @@ When the implementation is complex or unclear:
 - Apply the same quality standards to test code
 - Organize tests logically and consistently
 
+### Creating Unnecessary Files
+- **NEVER create example files** - work only with the actual codebase
+- **NEVER create temporary executable files** to test if changes are effective
+- **NEVER create test files that are not explicitly requested by the user**
+- Rely on text analysis and existing tests to verify changes
+- Use the actual test suite to validate functionality
+- Keep the workspace clean and focused
+
 ## TDD and Design
 
 ### Emergent Design
