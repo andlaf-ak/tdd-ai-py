@@ -1,9 +1,9 @@
 from io import BytesIO
 from typing import Dict, List
 
-from tdd_ai_py.frequency_counter import create_frequency_map
-from tdd_ai_py.huffman_encoder import generate_huffman_codes
-from tdd_ai_py.huffman_tree_builder import HuffmanNode, build_huffman_tree
+from tdd_ai_py.compression.frequency_counter import create_frequency_map
+from tdd_ai_py.compression.huffman_encoder import generate_huffman_codes
+from tdd_ai_py.compression.huffman_tree_builder import HuffmanNode, build_huffman_tree
 
 
 def _assert_codes_are_prefix_free(codes: Dict[int, List[int]]) -> None:

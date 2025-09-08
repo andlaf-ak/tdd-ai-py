@@ -45,6 +45,10 @@ authors = ["Andrea Laforgia <andrea.laforgia@armakuni.com>"]
 readme = "README.md"
 packages = [{include = "tdd_ai_py", from = "src"}]
 
+[tool.poetry.scripts]
+huffman-compress = "tdd_ai_py.compress:main"
+huffman-decompress = "tdd_ai_py.decompress:main"
+
 [tool.poetry.dependencies]
 python = "^3.13"
 

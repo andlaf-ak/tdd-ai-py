@@ -1,5 +1,5 @@
+from ..compression.huffman_tree_builder import HuffmanNode
 from .bit_reader import BitReader
-from .huffman_tree_builder import HuffmanNode
 
 
 def deserialize_tree(bit_reader: BitReader) -> HuffmanNode:

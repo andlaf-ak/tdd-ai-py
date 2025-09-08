@@ -3,9 +3,9 @@ from typing import Callable, List
 
 import pytest
 
-from tdd_ai_py.bit_reader import BitReader
-from tdd_ai_py.huffman_tree_builder import HuffmanNode
-from tdd_ai_py.tree_deserializer import deserialize_tree
+from tdd_ai_py.compression.huffman_tree_builder import HuffmanNode
+from tdd_ai_py.decompression.bit_reader import BitReader
+from tdd_ai_py.decompression.tree_deserializer import deserialize_tree
 
 from .test_helpers import bits_and_bytes
 

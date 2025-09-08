@@ -18,7 +18,7 @@ from typing import BinaryIO, Optional
 # Add src directory to Python path so we can import tdd_ai_py
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from tdd_ai_py.compressor import HuffmanCompressor  # noqa: E402
+from tdd_ai_py.compression.compressor import HuffmanCompressor  # noqa: E402
 
 
 def validate_args() -> Optional[str]:

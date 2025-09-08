@@ -1,7 +1,7 @@
 from io import BytesIO
 from typing import List
 
-from tdd_ai_py.decompressor import HuffmanDecompressor
+from tdd_ai_py.decompression.decompressor import HuffmanDecompressor
 
 from .test_helpers import bits_and_bytes
 

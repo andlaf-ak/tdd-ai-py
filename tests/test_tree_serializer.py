@@ -1,5 +1,5 @@
-from tdd_ai_py.huffman_tree_builder import HuffmanNode
-from tdd_ai_py.tree_serializer import serialize_tree
+from tdd_ai_py.compression.huffman_tree_builder import HuffmanNode
+from tdd_ai_py.compression.tree_serializer import serialize_tree
 
 from .test_helpers import bits_and_bytes
 

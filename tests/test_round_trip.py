@@ -7,8 +7,8 @@ from io import BytesIO
 
 import pytest
 
-from tdd_ai_py.compressor import HuffmanCompressor
-from tdd_ai_py.decompressor import HuffmanDecompressor
+from tdd_ai_py.compression.compressor import HuffmanCompressor
+from tdd_ai_py.decompression.decompressor import HuffmanDecompressor
 
 
 class TestRoundTrip:

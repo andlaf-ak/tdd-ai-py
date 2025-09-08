@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from tdd_ai_py.bit_reader import BitReader
+from tdd_ai_py.decompression.bit_reader import BitReader
 
 
 class TestBitReader:

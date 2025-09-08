@@ -1,10 +1,10 @@
-"""Tests for bit writer component that buffers bits and emits bytes."""
+"""Tests for the bit writer module."""
 
 from io import BytesIO
 
 import pytest
 
-from tdd_ai_py.bit_writer import BitWriter
+from tdd_ai_py.compression.bit_writer import BitWriter
 
 
 class TestBitWriter:

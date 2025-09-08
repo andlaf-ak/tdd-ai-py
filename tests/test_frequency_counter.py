@@ -1,7 +1,7 @@
 from io import BytesIO
 from typing import Dict
 
-from tdd_ai_py.frequency_counter import create_frequency_map
+from tdd_ai_py.compression.frequency_counter import create_frequency_map
 
 
 class TestCreateFrequencyMap:

@@ -2,7 +2,7 @@
 
 import pytest
 
-from tdd_ai_py.huffman_tree_builder import (
+from tdd_ai_py.compression.huffman_tree_builder import (
     HuffmanNode,
     build_huffman_tree,
     create_internal_node,

@@ -2,7 +2,7 @@
 
 from io import BytesIO
 
-from tdd_ai_py.compressor import HuffmanCompressor
+from tdd_ai_py.compression.compressor import HuffmanCompressor
 
 
 class TestHuffmanCompressor:

@@ -1,8 +1,8 @@
 from itertools import islice
 from typing import BinaryIO, Iterator, cast
 
+from ..compression.huffman_tree_builder import HuffmanNode
 from .bit_reader import BitReader
-from .huffman_tree_builder import HuffmanNode
 
 
 def decode_data(
