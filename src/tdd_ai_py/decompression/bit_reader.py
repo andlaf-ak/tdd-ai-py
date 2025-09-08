@@ -1,8 +1,7 @@
-from io import BytesIO
-from typing import Iterator
+from typing import BinaryIO, Iterator
 
 
-def bits_from_stream(input_stream: BytesIO) -> Iterator[int]:
+def bits_from_stream(input_stream: BinaryIO) -> Iterator[int]:
     """Generate bits from a byte stream."""
     while True:
         byte_data = input_stream.read(1)
@@ -14,7 +13,7 @@ def bits_from_stream(input_stream: BytesIO) -> Iterator[int]:
 
 
 class BitReader:
-    def __init__(self, input_stream: BytesIO):
+    def __init__(self, input_stream: BinaryIO):
         self._bits = bits_from_stream(input_stream)
 
     def read_bit(self) -> int:

@@ -162,6 +162,8 @@ run_tests() {
     # Clear results file
     > "../$RESULTS_FILE"
 
+
+
     # Test 1: Single byte file
     print_status $BLUE "=== Single Byte Tests ==="
     create_test_file "test_1byte.txt" 1 "single_byte"
