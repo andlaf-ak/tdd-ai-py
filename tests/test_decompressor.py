@@ -22,9 +22,7 @@ def _bits_to_bytes(bit_string: str) -> bytes:
     return bytes(byte_values)
 
 
-def _create_test_data(
-    length: int, tree_bits: str, data_bits: str = ""
-) -> bytes:
+def _create_test_data(length: int, tree_bits: str, data_bits: str = "") -> bytes:
     """Create test data with length header and bit content."""
     length_bytes = length.to_bytes(4, byteorder="big")
     content_bytes = _bits_to_bytes(tree_bits + data_bits)

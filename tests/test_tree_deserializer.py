@@ -36,9 +36,7 @@ def _validate_single_leaf(node: HuffmanNode, expected_char: int) -> None:
     assert node.is_leaf
 
 
-def _validate_binary_tree(
-    node: HuffmanNode, left_char: int, right_char: int
-) -> None:
+def _validate_binary_tree(node: HuffmanNode, left_char: int, right_char: int) -> None:
     # Root should be internal node
     assert node.character is None
     assert node.weight == 0
@@ -96,16 +94,7 @@ class TestTreeDeserializer:
                 _validate_binary_ab,
             ),
             (
-                bits_and_bytes(
-                    "0"
-                    + "1"
-                    + "01100001"
-                    + "0"
-                    + "1"
-                    + "01100010"
-                    + "1"
-                    + "01100011"
-                )[0],
+                bits_and_bytes("0" + "1" + "01100001" + "0" + "1" + "01100010" + "1" + "01100011")[0],
                 _validate_complex_tree,
             ),
         ],

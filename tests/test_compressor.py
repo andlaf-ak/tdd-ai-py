@@ -25,9 +25,7 @@ class TestHuffmanCompressor:
         # - Encoded data: "0" (1 bit, code for single character)
         # Total: 9 + 1 = 10 bits of tree+data, padded to 16 bits = 2 bytes
         # Tree+data bits: "1011000010" padded to "1011000010000000"
-        expected = bytes(
-            [0, 0, 0, 1]
-        ) + bytes(  # Length: 1 (4 bytes, big-endian)
+        expected = bytes([0, 0, 0, 1]) + bytes(  # Length: 1 (4 bytes, big-endian)
             [0xB0, 0x80]
         )  # "1011000010000000" = 0xB080
         assert result == expected

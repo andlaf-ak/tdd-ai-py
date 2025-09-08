@@ -13,9 +13,7 @@ class HuffmanDecompressor:
         self._length: Optional[int] = None
         self._tree: Optional[HuffmanNode] = None
 
-    def decompress(
-        self, input_stream: BytesIO, output_stream: BinaryIO
-    ) -> None:
+    def decompress(self, input_stream: BytesIO, output_stream: BinaryIO) -> None:
         self._length = self._read_big_endian_int(input_stream)
 
         bit_reader = BitReader(input_stream)

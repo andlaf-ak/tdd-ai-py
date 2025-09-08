@@ -16,9 +16,7 @@ def decode_data(
         _decode_multi_character_data(root, bit_reader, length, output_stream)
 
 
-def _decode_single_character_data(
-    root: HuffmanNode, length: int, output_stream: BinaryIO
-) -> None:
+def _decode_single_character_data(root: HuffmanNode, length: int, output_stream: BinaryIO) -> None:
     _validate_leaf_has_character(root)
     assert root.character is not None  # After validation, we know it's not None
     data = bytes([root.character] * length)
@@ -63,9 +61,7 @@ class _CompressedDataDecoder:
 
     def _add_decoded_character(self) -> None:
         _validate_leaf_has_character(self._current_node)
-        assert (
-            self._current_node.character is not None
-        )  # After validation, we know it's not None
+        assert self._current_node.character is not None  # After validation, we know it's not None
         self._output_stream.write(bytes([self._current_node.character]))
         self._characters_decoded += 1
 

@@ -4,9 +4,7 @@ from typing import Callable, Dict, List, Tuple, TypeVar
 T = TypeVar("T")
 
 
-def find_two_lowest_items(
-    items: List[T], key_func: Callable[[T], int]
-) -> Tuple[T, T]:
+def find_two_lowest_items(items: List[T], key_func: Callable[[T], int]) -> Tuple[T, T]:
     if len(items) == 0:
         raise ValueError("At least one item is required")
 
@@ -53,16 +51,12 @@ def create_leaf_node(character: int, weight: int) -> HuffmanNode:
 
 
 def create_internal_node(left: HuffmanNode, right: HuffmanNode) -> HuffmanNode:
-    return HuffmanNode(
-        weight=left.weight + right.weight, left=left, right=right
-    )
+    return HuffmanNode(weight=left.weight + right.weight, left=left, right=right)
 
 
 def build_huffman_tree(frequency_map: Dict[int, int]) -> HuffmanNode:
     # Create initial leaf nodes and build a min-heap
-    heap = [
-        create_leaf_node(char, freq) for char, freq in frequency_map.items()
-    ]
+    heap = [create_leaf_node(char, freq) for char, freq in frequency_map.items()]
     heapq.heapify(heap)
 
     # Keep combining nodes until only one remains
