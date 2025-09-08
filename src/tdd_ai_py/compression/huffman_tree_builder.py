@@ -7,7 +7,11 @@ T = TypeVar("T")
 def find_two_lowest_items(items: List[T], key_func: Callable[[T], int]) -> Tuple[T, T]:
     if not items:
         raise ValueError("At least one item is required")
-    return (items[0], items[0]) if len(items) == 1 else (sorted(items, key=key_func)[0], sorted(items, key=key_func)[1])
+    return (
+        (items[0], items[0])
+        if len(items) == 1
+        else (sorted(items, key=key_func)[0], sorted(items, key=key_func)[1])
+    )
 
 
 class HuffmanNode:

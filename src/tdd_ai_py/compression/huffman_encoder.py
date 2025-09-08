@@ -16,4 +16,6 @@ def generate_huffman_codes(root: HuffmanNode) -> Dict[int, List[int]]:
             }
         )
 
-    return {root.character: [0]} if root.character is not None else _generate_codes(root, [])
+    return (
+        {root.character: [0]} if root.character is not None else _generate_codes(root, [])
+    )

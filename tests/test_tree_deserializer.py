@@ -94,7 +94,9 @@ class TestTreeDeserializer:
                 _validate_binary_ab,
             ),
             (
-                bits_and_bytes("0" + "1" + "01100001" + "0" + "1" + "01100010" + "1" + "01100011")[0],
+                bits_and_bytes(
+                    "0" + "1" + "01100001" + "0" + "1" + "01100010" + "1" + "01100011"
+                )[0],
                 _validate_complex_tree,
             ),
         ],

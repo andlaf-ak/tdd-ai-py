@@ -24,7 +24,9 @@ def _create_three_character_tree() -> HuffmanNode:
     left_a = HuffmanNode(weight=1, character=ord("a"))
     right_internal_left_b = HuffmanNode(weight=1, character=ord("b"))
     right_internal_right_c = HuffmanNode(weight=1, character=ord("c"))
-    right_internal = HuffmanNode(weight=2, left=right_internal_left_b, right=right_internal_right_c)
+    right_internal = HuffmanNode(
+        weight=2, left=right_internal_left_b, right=right_internal_right_c
+    )
     return HuffmanNode(weight=3, left=left_a, right=right_internal)
 
 

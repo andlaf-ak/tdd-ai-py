@@ -22,7 +22,9 @@ class TestBitWriter:
             ),  # 17 bits: 11111111 + 11111111 + 10000000 -> 255, 255, 128
         ],
     )
-    def test_writes_bits_to_output_stream(self, bit_count: int, expected_bytes: bytes) -> None:
+    def test_writes_bits_to_output_stream(
+        self, bit_count: int, expected_bytes: bytes
+    ) -> None:
         """Test that BitWriter writes correct bytes to stream for different bit counts."""
         output_stream = BytesIO()
         writer = BitWriter(output_stream)

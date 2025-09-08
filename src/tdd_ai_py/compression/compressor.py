@@ -22,7 +22,10 @@ class HuffmanCompressor:
 
         # Second pass: seek back to start and create all bits functionally
         input_stream.seek(0)
-        all_bits = chain(serialize_tree(huffman_tree), *(codes[byte_value] for byte_value in iter_bytes(input_stream)))
+        all_bits = chain(
+            serialize_tree(huffman_tree),
+            *(codes[byte_value] for byte_value in iter_bytes(input_stream)),
+        )
 
         # Write all bits
         bit_writer = BitWriter(output_stream)

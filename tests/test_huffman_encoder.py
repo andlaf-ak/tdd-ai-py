@@ -17,7 +17,9 @@ def _assert_codes_are_prefix_free(codes: Dict[int, List[int]]) -> None:
                     assert not is_prefix, f"Code '{code1}' is prefix of '{code2}'"
 
 
-def _assert_optimal_code_lengths(codes: Dict[int, List[int]], frequencies: Dict[int, int]) -> None:
+def _assert_optimal_code_lengths(
+    codes: Dict[int, List[int]], frequencies: Dict[int, int]
+) -> None:
     for char1 in frequencies:
         for char2 in frequencies:
             if frequencies[char1] > frequencies[char2]:  # char1 is strictly more frequent

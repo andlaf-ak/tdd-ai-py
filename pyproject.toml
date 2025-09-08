@@ -7,7 +7,7 @@ exclude_dirs = ["tests"]
 skips = ["B101"]  # Skip assert_used test
 
 [tool.black]
-line-length = 120
+line-length = 90
 target-version = ['py312']
 include = '\.pyi?$'
 
@@ -20,14 +20,14 @@ exclude_lines = [
 ]
 
 [tool.flake8]
-max-line-length = 120
+max-line-length = 90
 ignore = ["E203", "W503", "E501", "D"]
 select = ["E", "W", "F", "N"]
 
 [tool.isort]
 profile = "black"
 multi_line_output = 3
-line_length = 120
+line_length = 90
 
 [tool.mypy]
 python_version = "3.13"
@@ -75,4 +75,4 @@ disable = [
 ]
 
 [tool.pylint.format]
-max-line-length = "120"
+max-line-length = "90"
