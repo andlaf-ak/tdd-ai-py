@@ -1,3 +1,4 @@
+from itertools import chain
 from typing import BinaryIO
 
 from .bit_writer import BitWriter
@@ -13,24 +14,18 @@ class HuffmanCompressor:
         # First pass: build frequency map by reading from stream
         frequency_map = create_frequency_map(input_stream)
         length = sum(frequency_map.values())
-
         huffman_tree = build_huffman_tree(frequency_map)
-
-        # Write length and tree serialization
-        output_stream.write(length.to_bytes(4, byteorder="big"))
-        serialized_tree = serialize_tree(huffman_tree)
         codes = generate_huffman_codes(huffman_tree)
 
-        bit_writer = BitWriter(output_stream)
+        # Write length and prepare bit stream
+        output_stream.write(length.to_bytes(4, byteorder="big"))
 
-        for bit in serialized_tree:
-            bit_writer.write_bit(bit)
-
-        # Second pass: seek back to start and encode the input
+        # Second pass: seek back to start and create all bits functionally
         input_stream.seek(0)
-        for byte_value in iter_bytes(input_stream):
-            code = codes[byte_value]
-            for bit in code:
-                bit_writer.write_bit(bit)
+        all_bits = chain(serialize_tree(huffman_tree), *(codes[byte_value] for byte_value in iter_bytes(input_stream)))
 
+        # Write all bits
+        bit_writer = BitWriter(output_stream)
+        for bit in all_bits:
+            bit_writer.write_bit(bit)
         bit_writer.flush()
