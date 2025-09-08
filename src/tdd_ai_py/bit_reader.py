@@ -1,30 +1,24 @@
 from io import BytesIO
+from typing import Iterator
+
+
+def bits_from_stream(input_stream: BytesIO) -> Iterator[int]:
+    """Generate bits from a byte stream."""
+    while True:
+        byte_data = input_stream.read(1)
+        if not byte_data:
+            return
+        byte_value = byte_data[0]
+        for i in range(8):
+            yield (byte_value >> (7 - i)) & 1
 
 
 class BitReader:
     def __init__(self, input_stream: BytesIO):
-        self._input_stream = input_stream
-        self._buffer = 0
-        self._bits_in_buffer = 0
+        self._bits = bits_from_stream(input_stream)
 
     def read_bit(self) -> int:
-        if self._needs_new_byte():
-            self._load_next_byte()
-
-        return self._extract_next_bit()
-
-    def _needs_new_byte(self) -> bool:
-        return self._bits_in_buffer == 0
-
-    def _load_next_byte(self) -> None:
-        byte_data = self._input_stream.read(1)
-        if not byte_data:
-            raise EOFError("No more data available")
-        self._buffer = byte_data[0]
-        self._bits_in_buffer = 8
-
-    def _extract_next_bit(self) -> int:
-        bit = (self._buffer >> 7) & 1
-        self._buffer = (self._buffer << 1) & 0xFF
-        self._bits_in_buffer -= 1
-        return bit
+        try:
+            return next(self._bits)
+        except StopIteration as exc:
+            raise EOFError("No more data available") from exc
