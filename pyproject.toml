@@ -65,6 +65,7 @@ mypy = "^1.5.0"
 bandit = "^1.7.5"
 safety = "^2.3.0"
 pre-commit = "^3.0.0"
+mutmut = "^3.3.1"
 
 [tool.pylint.messages_control]
 disable = [
@@ -76,3 +77,8 @@ disable = [
 
 [tool.pylint.format]
 max-line-length = "90"
+
+[tool.mutmut]
+paths_to_mutate = ["src/"]
+backup = false
+runner = "python -m pytest"

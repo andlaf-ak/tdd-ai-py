@@ -241,3 +241,7 @@ wandb/
 # Local configuration
 config.local.*
 .secrets
+
+# Mutation testing
+mutants/
+.mutmut-cache
